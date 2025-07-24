@@ -19,8 +19,8 @@ Nếu bạn từng gặp phải một ứng viên gây thất vọng — như **
 👉 [https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates](https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates)  
 *Admin sẽ cập nhật vào trang web và trả về link của ứng viên thông qua discussion bạn đã tạo.*
 
-**Tùy chọn 3:** Gửi email đến:  
-👉 [BadCandidate@googlegroups.com](mailto:badcandidate@googlegroups.com) (không khuyến khích)  
+**Tùy chọn 3 (không khuyến khích):** Gửi email đến:  
+👉 [BadCandidate@googlegroups.com](mailto:badcandidate@googlegroups.com)  
 *Admin sẽ cập nhật vào trang web và trả về link của ứng viên thông qua email cho bạn sau khi đã validate thông tin.*
 
 Nội dung bạn gửi nên bao gồm:
@@ -65,8 +65,8 @@ If you've encountered a candidate who truly stands out for the wrong reasons —
 👉 [https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates](https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates)  
 *Admin will update the website and return the land of bad candidate via discussion that you created.*
 
-**Option 3:** Send email to:  
-👉 [BadCandidate@googlegroups.com](mailto:badcandidate@googlegroups.com) (not recommended)  
+**Option 3 (not recommended):** Send email to:  
+👉 [BadCandidate@googlegroups.com](mailto:badcandidate@googlegroups.com)   
 *Admin will update the website and return the land of bad candidate after reviewing all the information.*
 
 Your contribution should include:
