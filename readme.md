@@ -88,3 +88,5 @@ If you have questions or concerns about this project, please post them at:
 Let's work together to create a safer, smarter, and more transparent hiring ecosystem.
 
 🚧 🚧 🚧 🚧 🚧 🚧
+
+<a href="https://info.flagcounter.com/hkEe"><img src="https://s01.flagcounter.com/count/hkEe/bg_FFFFFF/txt_000000/border_CCCCCC/columns_1/maxflags_1/viewers_3/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
