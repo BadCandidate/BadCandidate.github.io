@@ -12,13 +12,16 @@ Nếu bạn từng gặp phải một ứng viên gây thất vọng — như **
 
 ✅ Để đóng góp:  
 **Tùy chọn 1:** Gửi **Pull Request (PR)** với hồ sơ của ứng viên đến repository GitHub công khai:  
-👉 [https://github.com/BadCandidate](https://github.com/BadCandidate)
+👉 [https://github.com/BadCandidate](https://github.com/BadCandidate)  
+*Admin sẽ cập nhật vào trang web và trả về link của ứng viên thông qua PR bạn đã tạo.*
 
 **Tùy chọn 2:** Tạo **Discussion** trong phần Bad Candidates:  
-👉 [https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates](https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates)
+👉 [https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates](https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates)  
+*Admin sẽ cập nhật vào trang web và trả về link của ứng viên thông qua discussion bạn đã tạo.*
 
-**Tùy chọn 3:** Gửi email đến [BadCandidate@googlegroups.com](mailto:badcandidate@googlegroups.com) (không khuyến khích)  
-Admin sẽ cập nhật vào trang web và trả về link của ứng viên thông qua email cho bạn sau khi đã validate thông tin.
+**Tùy chọn 3:** Gửi email đến:  
+👉 [BadCandidate@googlegroups.com](mailto:badcandidate@googlegroups.com) (không khuyến khích)  
+*Admin sẽ cập nhật vào trang web và trả về link của ứng viên thông qua email cho bạn sau khi đã validate thông tin.*
 
 Nội dung bạn gửi nên bao gồm:
 - Mô tả rõ ràng, tôn trọng và khách quan về vấn đề  
@@ -55,13 +58,16 @@ If you've encountered a candidate who truly stands out for the wrong reasons —
 
 ✅ To contribute:  
 **Option 1:** Submit a **Pull Request (PR)** with the candidate's profile to our public GitHub repository:  
-👉 [https://github.com/BadCandidate](https://github.com/BadCandidate)
+👉 [https://github.com/BadCandidate](https://github.com/BadCandidate)  
+*Admin will update the website and return the land of bad candidate via PR that you created.*
 
 **Option 2:** Create a **Discussion** in the Bad Candidates category:  
-👉 [https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates](https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates)
+👉 [https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates](https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates)  
+*Admin will update the website and return the land of bad candidate via discussion that you created.*
 
-**Option 3:** Send email to [BadCandidate@googlegroups.com](mailto:badcandidate@googlegroups.com) (not recommended)  
-Admin will update the website and return the land of bad candidate after reviewing all the information.
+**Option 3:** Send email to:  
+👉 [BadCandidate@googlegroups.com](mailto:badcandidate@googlegroups.com) (not recommended)  
+*Admin will update the website and return the land of bad candidate after reviewing all the information.*
 
 Your contribution should include:
 - A clear, respectful summary of the issue  
