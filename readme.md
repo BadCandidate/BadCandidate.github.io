@@ -11,13 +11,20 @@ Chúng tôi mong muốn giúp nhà tuyển dụng, người phỏng vấn và c�
 Nếu bạn từng gặp phải một ứng viên gây thất vọng — như **bỏ phỏng vấn không báo trước**, **khai sai thông tin**, **thiếu kỹ năng cơ bản**, **thô lỗ** hoặc có **hành vi độc hại** — bạn có thể đóng góp thông tin cho cộng đồng.
 
 ✅ Để đóng góp:  
-Hãy gửi **Pull Request (PR)** với hồ sơ của ứng viên đến repository GitHub công khai:  
+**Tùy chọn 1:** Gửi **Pull Request (PR)** với hồ sơ của ứng viên đến repository GitHub công khai:  
 👉 [https://github.com/BadCandidate](https://github.com/BadCandidate)
+
+**Tùy chọn 2:** Tạo **Discussion** trong phần Bad Candidates:  
+👉 [https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates](https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates)
 
 Nội dung bạn gửi nên bao gồm:
 - Mô tả rõ ràng, tôn trọng và khách quan về vấn đề  
 - Bối cảnh liên quan (ví dụ: vị trí tuyển dụng, giai đoạn phỏng vấn, hành vi quan sát được)  
 - **Không bao gồm thông tin cá nhân nhạy cảm** (vd: tên thật, số điện thoại, email, giấy tờ tùy thân)
+
+## ❓ Hỏi Đáp & Thắc Mắc
+Nếu bạn có câu hỏi hoặc thắc mắc về dự án này, vui lòng gửi tại:  
+👉 [https://github.com/orgs/BadCandidate/discussions/categories/q-a](https://github.com/orgs/BadCandidate/discussions/categories/q-a)
 
 ## ⚠️ Nguyên Tắc Cộng Đồng  
 - **Ghi nhận thông tin đúng sự thật** – Không chấp nhận công kích cá nhân hay báo cáo sai sự thật  
@@ -46,13 +53,20 @@ Our mission is to help recruiters, hiring managers, and companies **avoid bad hi
 If you've encountered a candidate who truly stands out for the wrong reasons — ghosting, lying on CVs, failing basic tasks, being rude, or showing toxic behavior — we invite you to contribute.
 
 ✅ To contribute:  
-Please submit a **Pull Request (PR)** with the candidate’s profile to our public GitHub repository:  
+**Option 1:** Submit a **Pull Request (PR)** with the candidate's profile to our public GitHub repository:  
 👉 [https://github.com/BadCandidate](https://github.com/BadCandidate)
+
+**Option 2:** Create a **Discussion** in the Bad Candidates category:  
+👉 [https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates](https://github.com/orgs/BadCandidate/discussions/categories/bad-candidates)
 
 Your contribution should include:
 - A clear, respectful summary of the issue  
 - Relevant context (e.g. job title, interview stage, behavior observed)  
 - **No private or sensitive information** (e.g., real names, contact details, documents)  
+
+## ❓ Q&A & Questions
+If you have questions or concerns about this project, please post them at:  
+👉 [https://github.com/orgs/BadCandidate/discussions/categories/q-a](https://github.com/orgs/BadCandidate/discussions/categories/q-a)
 
 ## ⚠️ Community Guidelines  
 - **Keep it factual** – Personal attacks or fake reports will be removed  
@@ -61,7 +75,7 @@ Your contribution should include:
 
 ---
 
-Let’s work together to create a safer, smarter, and more transparent hiring ecosystem.
+Let's work together to create a safer, smarter, and more transparent hiring ecosystem.
 
 🚧 🚧 🚧
 
