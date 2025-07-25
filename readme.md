@@ -13,26 +13,6 @@ twitter:title: "🚫 Danh Sách Ứng Viên Tệ - Bad Candidate List"
 twitter:description: "Tổng hợp danh sách ứng viên có dấu hiệu cảnh báo, hành vi thiếu chuyên nghiệp."
 ---
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Danh Sách Ứng Viên Tệ - Bad Candidate List",
-  "description": "Tổng hợp danh sách ứng viên có dấu hiệu cảnh báo, hành vi thiếu chuyên nghiệp trong quá trình tuyển dụng",
-  "url": "https://badcandidate.github.io",
-  "mainEntity": {
-    "@type": "Organization",
-    "name": "BadCandidate Community",
-    "description": "Cộng đồng chia sẻ thông tin về ứng viên có dấu hiệu cảnh báo"
-  },
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://badcandidate.github.io/search?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
-
 ## 🟢 Bản đọc tiếng Việt 🟢
 
 # 🚫 Danh Sách Ứng Viên Tệ - Bad Candidate List 🚫
