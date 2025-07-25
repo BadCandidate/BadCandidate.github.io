@@ -1,7 +1,3 @@
----
-title: Danh Sách Ứng Viên Tệ - Bad Candidate List | Cộng Đồng Đánh Giá Ứng Viên
----
-
 # 🚫 Danh Sách Ứng Viên Tệ - Bad Candidate List 🚫
 
 **Trang web chính thức** tổng hợp và chia sẻ **những phản hồi trung thực, chuyên nghiệp** về các ứng viên từng thể hiện **hiệu suất kém**, **hành vi thiếu chuyên nghiệp** hoặc **thái độ tiêu cực** trong quá trình phỏng vấn hoặc làm việc.
