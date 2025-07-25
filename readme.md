@@ -1,20 +1,3 @@
----
-title: "🚫 Danh Sách Ứng Viên Tệ - Bad Candidate List | Cộng Đồng Đánh Giá Ứng Viên"
-description: "Tổng hợp danh sách ứng viên có dấu hiệu cảnh báo, hành vi thiếu chuyên nghiệp. Giúp nhà tuyển dụng tránh quyết định sai lầm. Cộng đồng minh bạch, an toàn."
-keywords: "ứng viên tệ, bad candidate, danh sách ứng viên, phỏng vấn, tuyển dụng, hành vi thiếu chuyên nghiệp, red flags, hiring mistakes"
-author: "BadCandidate Community"
-robots: "index, follow"
-og:title: "🚫 Danh Sách Ứng Viên Tệ - Bad Candidate List"
-og:description: "Tổng hợp danh sách ứng viên có dấu hiệu cảnh báo, hành vi thiếu chuyên nghiệp. Giúp nhà tuyển dụng tránh quyết định sai lầm."
-og:type: "website"
-og:url: "https://badcandidate.github.io"
-twitter:card: "summary_large_image"
-twitter:title: "🚫 Danh Sách Ứng Viên Tệ - Bad Candidate List"
-twitter:description: "Tổng hợp danh sách ứng viên có dấu hiệu cảnh báo, hành vi thiếu chuyên nghiệp."
----
-
-## 🟢 Bản đọc tiếng Việt 🟢
-
 # 🚫 Danh Sách Ứng Viên Tệ - Bad Candidate List 🚫
 
 **Trang web chính thức** tổng hợp và chia sẻ **những phản hồi trung thực, chuyên nghiệp** về các ứng viên từng thể hiện **hiệu suất kém**, **hành vi thiếu chuyên nghiệp** hoặc **thái độ tiêu cực** trong quá trình phỏng vấn hoặc làm việc.
