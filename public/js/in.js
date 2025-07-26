@@ -117,38 +117,153 @@ function updateNavButtons() {
     document.getElementById('prev-page').disabled = (pageNum <= 1);
 }
 
+/**
+ * Safely update Facebook comments with error handling
+ */
+function updateFacebookComments() {
+    try {
+        const fbComments = document.querySelector('.fb-comments');
+        const fallbackElement = document.getElementById('comments-fallback');
+        
+        if (fbComments) {
+            fbComments.setAttribute('data-href', fbCommentsUrl);
+            
+            // Safely reload Facebook comments with new URL
+            if (window.FB && typeof window.FB.XFBML === 'function') {
+                try {
+                    window.FB.XFBML.parse();
+                } catch (fbError) {
+                    console.warn('Facebook XFBML parse error:', fbError);
+                    showCommentsFallback();
+                    // Fallback: try to reinitialize Facebook SDK
+                    setTimeout(() => {
+                        try {
+                            if (window.FB && typeof window.FB.XFBML === 'function') {
+                                window.FB.XFBML.parse();
+                                hideCommentsFallback();
+                            }
+                        } catch (retryError) {
+                            console.warn('Facebook SDK retry failed:', retryError);
+                            showCommentsFallback();
+                        }
+                    }, 1000);
+                }
+            } else {
+                showCommentsFallback();
+            }
+        }
+    } catch (error) {
+        console.warn('Error updating Facebook comments:', error);
+        showCommentsFallback();
+    }
+}
+
+/**
+ * Show fallback message for comments
+ */
+function showCommentsFallback() {
+    const fallbackElement = document.getElementById('comments-fallback');
+    const fbComments = document.querySelector('.fb-comments');
+    
+    if (fallbackElement) {
+        fallbackElement.classList.remove('hidden');
+    }
+    if (fbComments) {
+        fbComments.style.display = 'none';
+    }
+}
+
+/**
+ * Hide fallback message for comments
+ */
+function hideCommentsFallback() {
+    const fallbackElement = document.getElementById('comments-fallback');
+    const fbComments = document.querySelector('.fb-comments');
+    
+    if (fallbackElement) {
+        fallbackElement.classList.add('hidden');
+    }
+    if (fbComments) {
+        fbComments.style.display = 'block';
+    }
+}
+
+/**
+ * Initialize Facebook SDK with error handling
+ */
+function initFacebookSDK() {
+    try {
+        // Check if Facebook SDK is already loaded
+        if (window.FB) {
+            updateFacebookComments();
+            return;
+        }
+
+        // Wait for Facebook SDK to load
+        const checkFB = setInterval(() => {
+            if (window.FB) {
+                clearInterval(checkFB);
+                updateFacebookComments();
+            }
+        }, 100);
+
+        // Timeout after 10 seconds
+        setTimeout(() => {
+            clearInterval(checkFB);
+            console.warn('Facebook SDK failed to load within timeout');
+            showCommentsFallback();
+        }, 10000);
+
+    } catch (error) {
+        console.warn('Error initializing Facebook SDK:', error);
+        showCommentsFallback();
+    }
+}
+
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    // Add event listeners for navigation buttons
-    document.getElementById('prev-page').addEventListener('click', onPrevPage);
-    document.getElementById('next-page').addEventListener('click', onNextPage);
-    
-    // Set up redirect PDF button
-    const redirectBtn = document.getElementById('redirect-pdf-btn');
-    if (redirectBtn) {
-        redirectBtn.href = pdfUrl;
-    }
-    
-    // Update Facebook comments URL dynamically
-    const fbComments = document.querySelector('.fb-comments');
-    if (fbComments) {
-        fbComments.setAttribute('data-href', fbCommentsUrl);
-        // Reload Facebook comments with new URL
-        if (window.FB) {
-            FB.XFBML.parse();
+    try {
+        // Add event listeners for navigation buttons
+        const prevButton = document.getElementById('prev-page');
+        const nextButton = document.getElementById('next-page');
+        
+        if (prevButton) {
+            prevButton.addEventListener('click', onPrevPage);
         }
+        if (nextButton) {
+            nextButton.addEventListener('click', onNextPage);
+        }
+        
+        // Set up redirect PDF button
+        const redirectBtn = document.getElementById('redirect-pdf-btn');
+        if (redirectBtn) {
+            redirectBtn.href = pdfUrl;
+        }
+        
+        // Initialize Facebook SDK with error handling
+        initFacebookSDK();
+        
+        // Load PDF document with error handling
+        pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc_) {
+            pdfDoc = pdfDoc_;
+            const pageCountElement = document.getElementById('page-count');
+            if (pageCountElement) {
+                pageCountElement.textContent = pdfDoc.numPages;
+            }
+            if (loader) {
+                loader.style.display = 'none'; // Hide loader
+            }
+            renderPage(pageNum);
+        }).catch(function(error) {
+            console.error('Error loading PDF:', error);
+            if (loader) {
+                loader.textContent = 'Failed to load PDF. Please try again or check the console for details.';
+            }
+            // This can happen due to CORS policy. For a real project, 
+            // ensure your PDF is served from the same origin or with proper CORS headers.
+        });
+        
+    } catch (error) {
+        console.error('Error in DOMContentLoaded:', error);
     }
-    
-    // Load PDF document
-    pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc_) {
-        pdfDoc = pdfDoc_;
-        document.getElementById('page-count').textContent = pdfDoc.numPages;
-        loader.style.display = 'none'; // Hide loader
-        renderPage(pageNum);
-    }).catch(function(error) {
-        console.error('Error loading PDF: ' + error);
-        loader.textContent = 'Failed to load PDF. Check the console for details.';
-        // This can happen due to CORS policy. For a real project, 
-        // ensure your PDF is served from the same origin or with proper CORS headers.
-    });
 }); 
