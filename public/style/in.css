@@ -7,6 +7,7 @@ body {
 #pdf-viewer-container {
     max-height: 90vh;
     overflow: auto;
+    position: relative;
 }
 
 /* Ensure the canvas is not distorted */
@@ -15,4 +16,21 @@ body {
     height: auto;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Ensure controls don't interfere with PDF viewing */
+#pdf-viewer-container .absolute {
+    pointer-events: none;
+}
+
+#pdf-viewer-container .absolute > * {
+    pointer-events: auto;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 1024px) {
+    #pdf-viewer-container .absolute {
+        position: relative;
+        margin-top: 1rem;
+    }
 } 

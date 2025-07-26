@@ -25,32 +25,43 @@
             <p class="text-gray-600 mt-2">Read the document and leave your comments below.</p>
         </header>
 
-        <!-- Main content grid: 1 column on mobile, 2 on desktop -->
-        <main class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Main content grid: 1 column on mobile, 2/3 and 1/3 on desktop -->
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            <!-- Left Side: PDF Viewer -->
-            <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col">
+            <!-- Left Side: PDF Viewer (2/3 width on desktop) -->
+            <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col lg:col-span-2">
                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">Document Viewer</h2>
                 
                 <!-- PDF.js will render the PDF page on this canvas -->
-                <div id="pdf-viewer-container" class="flex-grow flex justify-center items-start bg-gray-50 p-4 rounded-md">
+                <div id="pdf-viewer-container" class="flex-grow flex justify-center items-start bg-gray-50 p-4 rounded-md relative">
                      <canvas id="pdf-canvas"></canvas>
-                </div>
-
-                <!-- PDF Navigation Controls -->
-                <div class="flex items-center justify-center mt-4 p-2 rounded-lg bg-gray-100">
-                    <button id="prev-page" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-l-md transition-colors duration-300 disabled:bg-gray-300">
-                        Previous
-                    </button>
-                    <div class="bg-white text-gray-800 font-semibold py-2 px-6">
-                        <span>Page </span>
-                        <span id="page-num"></span>
-                        <span> of </span>
-                        <span id="page-count"></span>
-                    </div>
-                    <button id="next-page" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r-md transition-colors duration-300 disabled:bg-gray-300">
-                        Next
-                    </button>
+                     
+                     <!-- Bottom controls overlay -->
+                     <div class="absolute bottom-4 left-4 right-4 flex justify-between items-center">
+                         <!-- Redirect to PDF button (bottom left) -->
+                         <a id="redirect-pdf-btn" href="#" target="_blank" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md transition-colors duration-300 flex items-center gap-2">
+                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                             </svg>
+                             Open PDF
+                         </a>
+                         
+                         <!-- PDF Navigation Controls (bottom right) -->
+                         <div class="flex items-center p-2 rounded-lg bg-white/90 backdrop-blur-sm shadow-lg">
+                             <button id="prev-page" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-l-md transition-colors duration-300 disabled:bg-gray-300">
+                                 Previous
+                             </button>
+                             <div class="bg-white text-gray-800 font-semibold py-2 px-6">
+                                 <span>Page </span>
+                                 <span id="page-num"></span>
+                                 <span> of </span>
+                                 <span id="page-count"></span>
+                             </div>
+                             <button id="next-page" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r-md transition-colors duration-300 disabled:bg-gray-300">
+                                 Next
+                             </button>
+                         </div>
+                     </div>
                 </div>
                  <div id="loader" class="text-center p-4">Loading Document...</div>
             </div>

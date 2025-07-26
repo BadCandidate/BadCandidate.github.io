@@ -124,6 +124,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('prev-page').addEventListener('click', onPrevPage);
     document.getElementById('next-page').addEventListener('click', onNextPage);
     
+    // Set up redirect PDF button
+    const redirectBtn = document.getElementById('redirect-pdf-btn');
+    if (redirectBtn) {
+        redirectBtn.href = pdfUrl;
+    }
+    
     // Update Facebook comments URL dynamically
     const fbComments = document.querySelector('.fb-comments');
     if (fbComments) {
