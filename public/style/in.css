@@ -18,19 +18,83 @@ body {
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
-/* Ensure controls don't interfere with PDF viewing */
-#pdf-viewer-container .absolute {
-    pointer-events: none;
-}
-
-#pdf-viewer-container .absolute > * {
-    pointer-events: auto;
+/* Bottom controls row styling */
+.pdf-bottom-controls {
+    border-top: 1px solid #e5e7eb; /* Tailwind gray-200 */
+    padding-top: 1rem;
+    margin-top: 1rem;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 /* Responsive adjustments for mobile */
-@media (max-width: 1024px) {
-    #pdf-viewer-container .absolute {
-        position: relative;
-        margin-top: 1rem;
+@media (max-width: 768px) {
+    #pdf-viewer-container {
+        max-height: 50vh;
+    }
+    
+    .pdf-bottom-controls {
+        gap: 0.5rem;
+    }
+    
+    /* Make buttons smaller on mobile */
+    .pdf-bottom-controls button,
+    .pdf-bottom-controls a {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+        min-width: auto;
+    }
+    
+    /* Reduce padding on page info for mobile */
+    .pdf-bottom-controls .bg-white.text-gray-800 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        font-size: 0.75rem;
+        min-width: auto;
+    }
+    
+    /* Make the redirect button more compact */
+    .pdf-bottom-controls a svg {
+        width: 0.875rem;
+        height: 0.875rem;
+    }
+    
+    /* Ensure paging controls stay horizontal but compact */
+    .pdf-bottom-controls .flex.items-center {
+        gap: 0.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Even more compact for very small screens */
+    .pdf-bottom-controls {
+        gap: 0.25rem;
+    }
+    
+    .pdf-bottom-controls button,
+    .pdf-bottom-controls a {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.625rem;
+    }
+    
+    .pdf-bottom-controls .bg-white.text-gray-800 {
+        padding-left: 0.375rem;
+        padding-right: 0.375rem;
+        font-size: 0.625rem;
+    }
+    
+    .pdf-bottom-controls a svg {
+        width: 0.75rem;
+        height: 0.75rem;
+    }
+    
+    .pdf-bottom-controls .flex.items-center {
+        gap: 0.125rem;
     }
 } 

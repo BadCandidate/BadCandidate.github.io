@@ -21,8 +21,7 @@ if (pdfParam) {
 
 // Fallback URL if no parameter or invalid format
 if (!pdfUrl) {
-    pdfUrl = 'https://badcandidate.github.io/dinh_huu_luan.pdf';
-    fbCommentsUrl = pdfUrl;
+    window.location.href = '/';
 }
 
 // --- PDF.js Setup ---
