@@ -124,37 +124,56 @@ function updateFacebookComments() {
     try {
         const fbComments = document.querySelector('.fb-comments');
         const fallbackElement = document.getElementById('comments-fallback');
+        const loadingElement = document.getElementById('comments-loading');
         
         if (fbComments) {
             fbComments.setAttribute('data-href', fbCommentsUrl);
+            
+            // Hide loading state
+            if (loadingElement) {
+                loadingElement.style.display = 'none';
+            }
+            
+            // Ensure comments are visible by default
+            fbComments.style.display = 'block';
+            if (fallbackElement) {
+                fallbackElement.classList.add('hidden');
+            }
             
             // Safely reload Facebook comments with new URL
             if (window.FB && typeof window.FB.XFBML === 'function') {
                 try {
                     window.FB.XFBML.parse();
+                    console.log('Facebook comments initialized successfully');
                 } catch (fbError) {
                     console.warn('Facebook XFBML parse error:', fbError);
-                    showCommentsFallback();
-                    // Fallback: try to reinitialize Facebook SDK
+                    // Don't show fallback immediately, try again
                     setTimeout(() => {
                         try {
                             if (window.FB && typeof window.FB.XFBML === 'function') {
                                 window.FB.XFBML.parse();
-                                hideCommentsFallback();
+                                console.log('Facebook comments retry successful');
+                            } else {
+                                console.warn('Facebook SDK not available on retry');
+                                showCommentsFallback();
                             }
                         } catch (retryError) {
                             console.warn('Facebook SDK retry failed:', retryError);
                             showCommentsFallback();
                         }
-                    }, 1000);
+                    }, 2000);
                 }
             } else {
-                showCommentsFallback();
+                console.log('Facebook SDK not available, waiting for initialization...');
+                // Don't show fallback immediately, wait for SDK to load
             }
         }
     } catch (error) {
         console.warn('Error updating Facebook comments:', error);
-        showCommentsFallback();
+        // Only show fallback for critical errors
+        if (error.message && error.message.includes('critical')) {
+            showCommentsFallback();
+        }
     }
 }
 
@@ -164,7 +183,11 @@ function updateFacebookComments() {
 function showCommentsFallback() {
     const fallbackElement = document.getElementById('comments-fallback');
     const fbComments = document.querySelector('.fb-comments');
+    const loadingElement = document.getElementById('comments-loading');
     
+    if (loadingElement) {
+        loadingElement.style.display = 'none';
+    }
     if (fallbackElement) {
         fallbackElement.classList.remove('hidden');
     }
@@ -179,7 +202,11 @@ function showCommentsFallback() {
 function hideCommentsFallback() {
     const fallbackElement = document.getElementById('comments-fallback');
     const fbComments = document.querySelector('.fb-comments');
+    const loadingElement = document.getElementById('comments-loading');
     
+    if (loadingElement) {
+        loadingElement.style.display = 'none';
+    }
     if (fallbackElement) {
         fallbackElement.classList.add('hidden');
     }
@@ -193,30 +220,35 @@ function hideCommentsFallback() {
  */
 function initFacebookSDK() {
     try {
+        console.log('Initializing Facebook SDK...');
+        
         // Check if Facebook SDK is already loaded
         if (window.FB) {
+            console.log('Facebook SDK already loaded');
             updateFacebookComments();
             return;
         }
 
         // Wait for Facebook SDK to load
+        let attempts = 0;
+        const maxAttempts = 50; // 5 seconds total (50 * 100ms)
+        
         const checkFB = setInterval(() => {
+            attempts++;
             if (window.FB) {
                 clearInterval(checkFB);
+                console.log('Facebook SDK loaded after', attempts, 'attempts');
                 updateFacebookComments();
+            } else if (attempts >= maxAttempts) {
+                clearInterval(checkFB);
+                console.warn('Facebook SDK failed to load after', maxAttempts, 'attempts');
+                showCommentsFallback();
             }
         }, 100);
 
-        // Timeout after 10 seconds
-        setTimeout(() => {
-            clearInterval(checkFB);
-            console.warn('Facebook SDK failed to load within timeout');
-            showCommentsFallback();
-        }, 10000);
-
     } catch (error) {
         console.warn('Error initializing Facebook SDK:', error);
-        showCommentsFallback();
+        // Don't show fallback immediately for initialization errors
     }
 }
 

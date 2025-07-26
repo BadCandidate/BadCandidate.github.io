@@ -91,7 +91,7 @@
 
     <!-- Facebook SDK for JavaScript -->
     <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0&appId=" nonce="XYZ"></script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0" nonce="XYZ"></script>
 
     <div class="container mx-auto p-4">
         <header class="text-center mb-8" role="banner">
@@ -155,16 +155,25 @@
                 
                 <!-- Facebook Comments Plugin with fallback -->
                 <div id="comments-container">
+                    <!-- Loading state -->
+                    <div id="comments-loading" class="text-center py-8 text-gray-500">
+                        <p>Loading comments...</p>
+                    </div>
+                    
                     <div class="fb-comments" 
                          data-href="" 
                          data-width="100%" 
                          data-numposts="5"
                          aria-label="Community comments section">
                     </div>
+                    
                     <!-- Fallback message if Facebook comments fail to load -->
                     <div id="comments-fallback" class="hidden text-center py-8 text-gray-500">
                         <p>Comments are temporarily unavailable.</p>
                         <p class="text-sm mt-2">You can still view and download the document.</p>
+                        <button onclick="initFacebookSDK()" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm">
+                            Try Again
+                        </button>
                     </div>
                 </div>
             </aside>
