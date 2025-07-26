@@ -3,126 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Viewer with Comments</title>
+    <title>PDF Viewer & Comments</title>
+    
+    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- PDF.js library from a CDN -->
+    
+    <!-- PDF.js library from Mozilla -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
+        /* Custom styles for a better look */
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Custom scrollbar for a better look */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
+        /* Style for the PDF viewer container to have a max height and scroll */
+        #pdf-viewer-container {
+            max-height: 90vh;
+            overflow: auto;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-        #pdf-render {
-            max-width: 100%;
+        /* Ensure the canvas is not distorted */
+        #pdf-canvas {
+            width: 100%;
             height: auto;
-            border: 1px solid #e2e8f0;
             border-radius: 0.5rem;
-        }
-        .comment-input-container {
-            position: sticky;
-            bottom: 0;
-            background-color: white;
-            padding-top: 1rem;
-            border-top: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Facebook SDK for JavaScript -->
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0" nonce="XYZ"></script>
 
     <div class="container mx-auto p-4">
         <header class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Document Review</h1>
-            <p class="text-gray-600 mt-2">Review the document below and leave your comments.</p>
+            <p class="text-gray-600 mt-2">Read the document and leave your comments below.</p>
         </header>
 
-        <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Main content grid: 1 column on mobile, 2 on desktop -->
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
             <!-- Left Side: PDF Viewer -->
-            <div class="lg:w-2/3">
-                <div class="bg-white p-4 rounded-lg shadow-md">
-                    <div id="pdf-viewer" class="h-[70vh] overflow-auto custom-scrollbar bg-gray-100 rounded-lg flex items-center justify-center">
-                        <canvas id="pdf-render"></canvas>
-                        <div id="viewer-placeholder" class="text-center text-gray-500">
-                            <svg class="mx-auto h-12 w-12 text-gray-400 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <p class="mt-2">Loading document...</p>
-                        </div>
-                    </div>
-                    <div id="pagination-controls" class="flex justify-between items-center mt-4">
-                        <button id="prev-page" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow hover:bg-gray-400 disabled:opacity-50 disabled:cursor-not-allowed">&larr; Previous</button>
-                        <span id="page-indicator">Page <span id="page-num">0</span> of <span id="page-count">0</span></span>
-                        <button id="next-page" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow hover:bg-gray-400 disabled:opacity-50 disabled:cursor-not-allowed">Next &rarr;</button>
-                    </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col">
+                <h2 class="text-2xl font-semibold mb-4 border-b pb-2">Document Viewer</h2>
+                
+                <!-- PDF.js will render the PDF page on this canvas -->
+                <div id="pdf-viewer-container" class="flex-grow flex justify-center items-start bg-gray-50 p-4 rounded-md">
+                     <canvas id="pdf-canvas"></canvas>
                 </div>
+
+                <!-- PDF Navigation Controls -->
+                <div class="flex items-center justify-center mt-4 p-2 rounded-lg bg-gray-100">
+                    <button id="prev-page" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-l-md transition-colors duration-300 disabled:bg-gray-300">
+                        Previous
+                    </button>
+                    <div class="bg-white text-gray-800 font-semibold py-2 px-6">
+                        <span>Page </span>
+                        <span id="page-num"></span>
+                        <span> of </span>
+                        <span id="page-count"></span>
+                    </div>
+                    <button id="next-page" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r-md transition-colors duration-300 disabled:bg-gray-300">
+                        Next
+                    </button>
+                </div>
+                 <div id="loader" class="text-center p-4">Loading Document...</div>
             </div>
 
-            <!-- Right Side: Comment Section -->
-            <div class="lg:w-1/3">
-                <div class="bg-white p-4 rounded-lg shadow-md h-full flex flex-col">
-                    <h2 class="text-xl font-bold mb-4 border-b pb-2">Comments</h2>
-                    <div id="comment-list" class="flex-grow overflow-y-auto custom-scrollbar space-y-4 h-[55vh] pr-2">
-                        <!-- Comments will be dynamically inserted here -->
-                        <div class="text-center text-gray-500 pt-10" id="no-comments-placeholder">
-                            <p>No comments yet. Be the first to comment!</p>
-                        </div>
-                    </div>
-                    <div class="comment-input-container mt-4">
-                        <div class="flex items-start space-x-3">
-                            <img class="h-10 w-10 rounded-full" src="https://placehold.co/40x40/E2E8F0/4A5568?text=Me" alt="Your profile picture" onerror="this.onerror=null;this.src='https://placehold.co/40x40/E2E8F0/4A5568?text=Me';">
-                            <div class="flex-1">
-                                <textarea id="comment-input" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" rows="3" placeholder="Add a comment..."></textarea>
-                                <button id="post-comment" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Post Comment</button>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Right Side: Facebook Comments -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-semibold mb-4 border-b pb-2">Comments</h2>
+                
+                <!-- 
+                  Facebook Comments Plugin.
+                  IMPORTANT: Replace 'https://developers.facebook.com/docs/plugins/comments/' 
+                  with the actual URL of the page where you host this file.
+                -->
+                <div class="fb-comments" 
+                     data-href="https://developers.facebook.com/docs/plugins/comments/" 
+                     data-width="100%" 
+                     data-numposts="5">
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <script>
-        // Set the workerSrc for PDF.js
-        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js`;
+        // --- PDF.js Setup ---
 
-        // --- PDF Viewer State and Elements ---
-        const pdfViewer = document.getElementById('pdf-viewer');
-        const canvas = document.getElementById('pdf-render');
-        const ctx = canvas.getContext('2d');
-        const placeholder = document.getElementById('viewer-placeholder');
-        
-        const pageNumEl = document.getElementById('page-num');
-        const pageCountEl = document.getElementById('page-count');
-        const prevPageBtn = document.getElementById('prev-page');
-        const nextPageBtn = document.getElementById('next-page');
+        // The URL for the PDF file you provided.
+        const url = 'https://badcandidate.github.io/dinh_huu_luan.pdf';
+
+        // Set worker source for PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
 
         let pdfDoc = null;
         let pageNum = 1;
         let pageRendering = false;
         let pageNumPending = null;
         const scale = 1.5;
+        
+        const canvas = document.getElementById('pdf-canvas');
+        const ctx = canvas.getContext('2d');
+        const loader = document.getElementById('loader');
 
         /**
          * Get page info from document, resize canvas accordingly, and render page.
-         * @param {number} num Page number.
+         * @param num Page number.
          */
         function renderPage(num) {
             pageRendering = true;
+            
             // Using promise to fetch the page
             pdfDoc.getPage(num).then(function(page) {
                 const viewport = page.getViewport({ scale: scale });
@@ -148,10 +141,10 @@
             });
 
             // Update page counters
-            pageNumEl.textContent = num;
-            updatePaginationButtons();
+            document.getElementById('page-num').textContent = num;
+            updateNavButtons();
         }
-
+        
         /**
          * If another page rendering in progress, waits until the rendering is
          * finished. Otherwise, executes rendering immediately.
@@ -174,7 +167,7 @@
             pageNum--;
             queueRenderPage(pageNum);
         }
-        prevPageBtn.addEventListener('click', onPrevPage);
+        document.getElementById('prev-page').addEventListener('click', onPrevPage);
 
         /**
          * Displays next page.
@@ -186,88 +179,31 @@
             pageNum++;
             queueRenderPage(pageNum);
         }
-        nextPageBtn.addEventListener('click', onNextPage);
+        document.getElementById('next-page').addEventListener('click', onNextPage);
         
         /**
-         * Updates the disabled state of the pagination buttons.
+         * Disables or enables navigation buttons based on the current page.
          */
-        function updatePaginationButtons() {
-            prevPageBtn.disabled = pageNum <= 1;
-            nextPageBtn.disabled = pageNum >= pdfDoc.numPages;
+        function updateNavButtons() {
+            document.getElementById('next-page').disabled = (pageNum >= pdfDoc.numPages);
+            document.getElementById('prev-page').disabled = (pageNum <= 1);
         }
 
         /**
-         * Asynchronously downloads and loads the PDF.
+         * Asynchronously downloads PDF.
          */
-        function loadPdf(url) {
-            pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
-                pdfDoc = pdfDoc_;
-                pageCountEl.textContent = pdfDoc.numPages;
-                placeholder.classList.add('hidden'); // Hide placeholder
-                canvas.classList.remove('hidden'); // Show canvas
-
-                // Initial page rendering
-                pageNum = 1;
-                renderPage(pageNum);
-            }).catch(function(error) {
-                // PDF loading error
-                console.error('Error loading PDF:', error);
-                placeholder.innerHTML = `<p class="text-red-500 p-4">Error: Could not load PDF.<br>Please ensure the file exists at the specified path.</p>`;
-            });
-        }
-        
-        // --- Comment Section Logic ---
-        const commentList = document.getElementById('comment-list');
-        const commentInput = document.getElementById('comment-input');
-        const postCommentBtn = document.getElementById('post-comment');
-        const noCommentsPlaceholder = document.getElementById('no-comments-placeholder');
-
-        function addComment() {
-            const commentText = commentInput.value.trim();
-            if (commentText === '') {
-                return;
-            }
-
-            if(noCommentsPlaceholder) {
-                noCommentsPlaceholder.style.display = 'none';
-            }
-
-            const commentElement = document.createElement('div');
-            commentElement.classList.add('flex', 'items-start', 'space-x-3');
-            commentElement.innerHTML = `
-                <img class="h-10 w-10 rounded-full" src="https://placehold.co/40x40/9CA3AF/FFFFFF?text=U" alt="User profile picture" onerror="this.onerror=null;this.src='https://placehold.co/40x40/E2E8F0/4A5568?text=U';">
-                <div class="flex-1">
-                    <div class="bg-gray-100 p-3 rounded-lg">
-                        <p class="text-sm text-gray-800">${commentText.replace(/\n/g, '<br>')}</p>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-1">Just now</div>
-                </div>
-            `;
-            commentList.appendChild(commentElement);
-            commentInput.value = '';
-            commentList.scrollTop = commentList.scrollHeight; // Scroll to bottom
-        }
-
-        postCommentBtn.addEventListener('click', addComment);
-        commentInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                addComment();
-            }
-        });
-
-        // --- Initial Load ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // FOR DEMONSTRATION: Using a sample PDF from the web.
-            // TO USE YOUR OWN 'dinh_huu_luan.pdf', place it in the same directory as this HTML file
-            // and change the URL below to 'dinh_huu_luan.pdf'.
-            // const pdfUrl = 'https://raw.githubusercontent.com/mozilla/pdf.js-sample-files/main/helloworld.pdf';
-            const pdfUrl = 'https://badcandidate.github.io/dinh_huu_luan.pdf'; // Uncomment this line to use your local file.
-            
-            loadPdf(pdfUrl);
+        pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+            pdfDoc = pdfDoc_;
+            document.getElementById('page-count').textContent = pdfDoc.numPages;
+            loader.style.display = 'none'; // Hide loader
+            renderPage(pageNum);
+        }).catch(function(error) {
+            console.error('Error loading PDF: ' + error);
+            loader.textContent = 'Failed to load PDF. Check the console for details.';
+            // This can happen due to CORS policy. For a real project, 
+            // ensure your PDF is served from the same origin or with proper CORS headers.
         });
 
     </script>
-
 </body>
 </html>
