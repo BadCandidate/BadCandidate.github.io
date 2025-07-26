@@ -26,18 +26,30 @@ function toggleLanguage() {
     const enContent = document.querySelector('[data-lang="en"]');
     const viButtons = document.querySelectorAll('[data-lang="vi"]');
     const enButtons = document.querySelectorAll('[data-lang="en"]');
+    const viFooterContent = document.querySelector('.footer-content[data-lang="vi"]');
+    const enFooterContent = document.querySelector('.footer-content[data-lang="en"]');
+    const viFooterBottom = document.querySelector('.footer-bottom[data-lang="vi"]');
+    const enFooterBottom = document.querySelector('.footer-bottom[data-lang="en"]');
 
     if (currentLanguage === 'vi') {
         viContent.classList.remove('active');
         enContent.classList.add('active');
         viButtons.forEach(btn => btn.style.display = 'none');
         enButtons.forEach(btn => btn.style.display = 'inline');
+        viFooterContent.style.display = 'none';
+        enFooterContent.style.display = 'grid';
+        viFooterBottom.style.display = 'none';
+        enFooterBottom.style.display = 'block';
         currentLanguage = 'en';
     } else {
         enContent.classList.remove('active');
         viContent.classList.add('active');
         enButtons.forEach(btn => btn.style.display = 'none');
         viButtons.forEach(btn => btn.style.display = 'inline');
+        enFooterContent.style.display = 'none';
+        viFooterContent.style.display = 'grid';
+        enFooterBottom.style.display = 'none';
+        viFooterBottom.style.display = 'block';
         currentLanguage = 'vi';
     }
     
@@ -77,17 +89,29 @@ function toggleTheme() {
             const enContent = document.querySelector('[data-lang="en"]');
             const viButtons = document.querySelectorAll('[data-lang="vi"]');
             const enButtons = document.querySelectorAll('[data-lang="en"]');
+            const viFooterContent = document.querySelector('.footer-content[data-lang="vi"]');
+            const enFooterContent = document.querySelector('.footer-content[data-lang="en"]');
+            const viFooterBottom = document.querySelector('.footer-bottom[data-lang="vi"]');
+            const enFooterBottom = document.querySelector('.footer-bottom[data-lang="en"]');
             
             if (currentLanguage === 'en') {
                 viContent.classList.remove('active');
                 enContent.classList.add('active');
                 viButtons.forEach(btn => btn.style.display = 'none');
                 enButtons.forEach(btn => btn.style.display = 'inline');
+                viFooterContent.style.display = 'none';
+                enFooterContent.style.display = 'grid';
+                viFooterBottom.style.display = 'none';
+                enFooterBottom.style.display = 'block';
             } else {
                 enContent.classList.remove('active');
                 viContent.classList.add('active');
                 enButtons.forEach(btn => btn.style.display = 'none');
                 viButtons.forEach(btn => btn.style.display = 'inline');
+                enFooterContent.style.display = 'none';
+                viFooterContent.style.display = 'grid';
+                enFooterBottom.style.display = 'none';
+                viFooterBottom.style.display = 'block';
             }
             
             // Set correct theme toggle icon
