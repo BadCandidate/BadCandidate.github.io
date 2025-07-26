@@ -1,0 +1,18 @@
+/* Custom styles for a better look */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Style for the PDF viewer container to have a max height and scroll */
+#pdf-viewer-container {
+    max-height: 90vh;
+    overflow: auto;
+}
+
+/* Ensure the canvas is not distorted */
+#pdf-canvas {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+} 

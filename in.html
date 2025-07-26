@@ -11,24 +11,7 @@
     <!-- PDF.js library from Mozilla -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
 
-    <style>
-        /* Custom styles for a better look */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Style for the PDF viewer container to have a max height and scroll */
-        #pdf-viewer-container {
-            max-height: 90vh;
-            overflow: auto;
-        }
-        /* Ensure the canvas is not distorted */
-        #pdf-canvas {
-            width: 100%;
-            height: auto;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
-    </style>
+    <link rel="stylesheet" href="public/style/in.css">
 </head>
 <body class="bg-gray-100 text-gray-800">
 
@@ -76,13 +59,9 @@
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">Comments</h2>
                 
-                <!-- 
-                  Facebook Comments Plugin.
-                  IMPORTANT: Replace 'https://developers.facebook.com/docs/plugins/comments/' 
-                  with the actual URL of the page where you host this file.
-                -->
+                <!-- Facebook Comments Plugin -->
                 <div class="fb-comments" 
-                     data-href="https://developers.facebook.com/docs/plugins/comments/" 
+                     data-href="" 
                      data-width="100%" 
                      data-numposts="5">
                 </div>
@@ -90,120 +69,6 @@
         </main>
     </div>
 
-    <script>
-        // --- PDF.js Setup ---
-
-        // The URL for the PDF file you provided.
-        const url = 'https://badcandidate.github.io/dinh_huu_luan.pdf';
-
-        // Set worker source for PDF.js
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
-
-        let pdfDoc = null;
-        let pageNum = 1;
-        let pageRendering = false;
-        let pageNumPending = null;
-        const scale = 1.5;
-        
-        const canvas = document.getElementById('pdf-canvas');
-        const ctx = canvas.getContext('2d');
-        const loader = document.getElementById('loader');
-
-        /**
-         * Get page info from document, resize canvas accordingly, and render page.
-         * @param num Page number.
-         */
-        function renderPage(num) {
-            pageRendering = true;
-            
-            // Using promise to fetch the page
-            pdfDoc.getPage(num).then(function(page) {
-                const viewport = page.getViewport({ scale: scale });
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                // Render PDF page into canvas context
-                const renderContext = {
-                    canvasContext: ctx,
-                    viewport: viewport
-                };
-                const renderTask = page.render(renderContext);
-
-                // Wait for rendering to finish
-                renderTask.promise.then(function() {
-                    pageRendering = false;
-                    if (pageNumPending !== null) {
-                        // New page rendering is pending
-                        renderPage(pageNumPending);
-                        pageNumPending = null;
-                    }
-                });
-            });
-
-            // Update page counters
-            document.getElementById('page-num').textContent = num;
-            updateNavButtons();
-        }
-        
-        /**
-         * If another page rendering in progress, waits until the rendering is
-         * finished. Otherwise, executes rendering immediately.
-         */
-        function queueRenderPage(num) {
-            if (pageRendering) {
-                pageNumPending = num;
-            } else {
-                renderPage(num);
-            }
-        }
-
-        /**
-         * Displays previous page.
-         */
-        function onPrevPage() {
-            if (pageNum <= 1) {
-                return;
-            }
-            pageNum--;
-            queueRenderPage(pageNum);
-        }
-        document.getElementById('prev-page').addEventListener('click', onPrevPage);
-
-        /**
-         * Displays next page.
-         */
-        function onNextPage() {
-            if (pageNum >= pdfDoc.numPages) {
-                return;
-            }
-            pageNum++;
-            queueRenderPage(pageNum);
-        }
-        document.getElementById('next-page').addEventListener('click', onNextPage);
-        
-        /**
-         * Disables or enables navigation buttons based on the current page.
-         */
-        function updateNavButtons() {
-            document.getElementById('next-page').disabled = (pageNum >= pdfDoc.numPages);
-            document.getElementById('prev-page').disabled = (pageNum <= 1);
-        }
-
-        /**
-         * Asynchronously downloads PDF.
-         */
-        pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
-            pdfDoc = pdfDoc_;
-            document.getElementById('page-count').textContent = pdfDoc.numPages;
-            loader.style.display = 'none'; // Hide loader
-            renderPage(pageNum);
-        }).catch(function(error) {
-            console.error('Error loading PDF: ' + error);
-            loader.textContent = 'Failed to load PDF. Check the console for details.';
-            // This can happen due to CORS policy. For a real project, 
-            // ensure your PDF is served from the same origin or with proper CORS headers.
-        });
-
-    </script>
+    <script src="public/js/in.js"></script>
 </body>
 </html>
