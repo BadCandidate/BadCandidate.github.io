@@ -29,20 +29,21 @@ function toggleTheme() {
     if (currentTheme === 'dark') {
         body.setAttribute('data-theme', 'light');
         currentTheme = 'light';
-        themeToggle.innerHTML = '<span data-lang="vi">☀️ Chế độ sáng</span><span data-lang="en" style="display: none;">☀️ Light Mode</span>';
+        themeToggle.innerHTML = '<span data-lang="vi">☀️</span><span data-lang="en" style="display: none;">☀️</span>';
     } else {
         body.setAttribute('data-theme', 'dark');
         currentTheme = 'dark';
-        themeToggle.innerHTML = '<span data-lang="vi">🌙 Chế độ tối</span><span data-lang="en" style="display: none;">🌙 Dark Mode</span>';
+        themeToggle.innerHTML = '<span data-lang="vi">🌙</span><span data-lang="en" style="display: none;">🌙</span>';
     }
 }
 
-// Initialize theme toggle text based on current language
-document.addEventListener('DOMContentLoaded', function() {
-    const themeToggle = document.querySelector('.theme-toggle');
-    if (currentTheme === 'dark') {
-        themeToggle.innerHTML = '<span data-lang="vi">🌙 Chế độ tối</span><span data-lang="en" style="display: none;">🌙 Dark Mode</span>';
-    } else {
-        themeToggle.innerHTML = '<span data-lang="vi">☀️ Chế độ sáng</span><span data-lang="en" style="display: none;">☀️ Light Mode</span>';
-    }
-});
+        // Initialize theme toggle text based on current language
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.querySelector('.theme-toggle');
+            if (currentTheme === 'dark') {
+                themeToggle.innerHTML = '<span data-lang="vi">🌙</span><span data-lang="en" style="display: none;">🌙</span>';
+            } else {
+                themeToggle.innerHTML = '<span data-lang="vi">☀️</span><span data-lang="en" style="display: none;">☀️</span>';
+            }
+        });
+
