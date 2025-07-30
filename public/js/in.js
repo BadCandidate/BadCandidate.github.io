@@ -165,25 +165,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Initialize Disqus Comments
-    var disqus_config = function () {
-        this.page.url = window.location.href;  // Current page URL
-        this.page.identifier = window.pdfUrl || window.location.href; // Use pdfUrl as identifier, fallback to current URL
-    };
-    (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://bad-candidate.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();
-    
-    // Load Disqus Count Script
-    var countScript = document.createElement('script');
-    countScript.id = 'dsq-count-scr';
-    countScript.src = '//bad-candidate.disqus.com/count.js';
-    countScript.async = true;
-    document.head.appendChild(countScript);
-    
     // Theme toggle functionality
     let currentTheme = 'light';
     
@@ -200,6 +181,24 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('badCandidateTheme', currentTheme);
     }
     
+    // Update Disqus theme
+    function updateDisqusTheme(theme) {
+        if (window.DISQUS) {
+            // If Disqus is already loaded, update its theme
+            window.DISQUS.reset({
+                reload: true,
+                config: function() {
+                    this.page.identifier = window.pdfUrl || window.location.href;
+                    this.page.url = window.location.href;
+                    this.page.theme = theme;
+                }
+            });
+        } else {
+            // If Disqus hasn't loaded yet, set the theme for when it does load
+            window.disqusTheme = theme;
+        }
+    }
+    
     // Toggle theme function
     function toggleTheme() {
         const body = document.body;
@@ -214,6 +213,9 @@ document.addEventListener('DOMContentLoaded', function() {
             currentTheme = 'dark';
             themeToggle.innerHTML = '<span>🌙</span>';
         }
+        
+        // Update Disqus theme
+        updateDisqusTheme(currentTheme);
         
         // Save theme preference
         saveThemePreference();
@@ -232,4 +234,27 @@ document.addEventListener('DOMContentLoaded', function() {
         themeToggle.innerHTML = '<span>🌙</span>';
     } else {
         themeToggle.innerHTML = '<span>☀️</span>';
-    } 
+    }
+    
+    // Initialize Disqus with current theme
+    updateDisqusTheme(currentTheme);
+    
+    // Initialize Disqus Comments
+    var disqus_config = function () {
+        this.page.url = window.location.href;  // Current page URL
+        this.page.identifier = window.pdfUrl || window.location.href; // Use pdfUrl as identifier, fallback to current URL
+        this.page.theme = window.disqusTheme || currentTheme; // Set theme based on current theme
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://badcandidate.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    
+    // Load Disqus Count Script
+    var countScript = document.createElement('script');
+    countScript.id = 'dsq-count-scr';
+    countScript.src = '//badcandidate.disqus.com/count.js';
+    countScript.async = true;
+    document.head.appendChild(countScript); 
