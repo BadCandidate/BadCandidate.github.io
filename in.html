@@ -89,15 +89,12 @@
 </head>
 <body class="bg-gray-100 text-gray-800" data-theme="light">
 
-    <!-- Facebook SDK for JavaScript -->
-    <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0" nonce="XYZ"></script>
 
     <div class="container mx-auto p-4">
         <header class="text-center mb-8" role="banner">
             <!-- <nav class="mb-4" role="navigation" aria-label="Breadcrumb">
                 <ol class="flex justify-center items-center space-x-2 text-sm text-gray-600">
-                    <li><a href="/" class="hover:text-blue-600 transition-colors">Home</a></li>
+                    <li><a href="/#disqus_thread" class="hover:text-blue-600 transition-colors">Home</a></li>
                     <li><span aria-hidden="true">/</span></li>
                     <li aria-current="page">Document Review</li>
                 </ol>
@@ -149,39 +146,21 @@
                 <div id="loader" class="text-center p-4" role="status" aria-live="polite">Loading Document...</div>
             </section>
 
-            <!-- Right Side: Facebook Comments -->
+            <!-- Right Side: Disqus Comments -->
             <aside class="bg-white p-6 rounded-lg shadow-lg" aria-labelledby="comments-heading">
                 <h2 id="comments-heading" class="text-2xl font-semibold mb-4 border-b pb-2">Comments</h2>
                 
-                <!-- Facebook Comments Plugin with fallback -->
+                <!-- Disqus Comments Plugin -->
                 <div id="comments-container">
-                    <!-- Loading state -->
-                    <div id="comments-loading" class="text-center py-8 text-gray-500">
-                        <p>Loading comments...</p>
-                    </div>
-                    
-                    <div class="fb-comments" 
-                         data-href="" 
-                         data-width="100%" 
-                         data-numposts="5"
-                         aria-label="Community comments section">
-                    </div>
-                    
-                    <!-- Fallback message if Facebook comments fail to load -->
-                    <div id="comments-fallback" class="hidden text-center py-8 text-gray-500">
-                        <p>Comments are temporarily unavailable.</p>
-                        <p class="text-sm mt-2">You can still view and download the document.</p>
-                        <button onclick="initFacebookSDK()" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm">
-                            Try Again
-                        </button>
-                    </div>
+                    <div id="disqus_thread" aria-label="Community comments section"></div>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
                 </div>
             </aside>
         </main>
         
         <!-- Footer with additional information -->
         <footer class="mt-8 text-center text-gray-600 text-sm" role="contentinfo">
-            <p>This tool is part of the <a href="/" class="text-blue-600 hover:underline">Bad Candidate</a> platform for transparent candidate evaluation.</p>
+            <p>This tool is part of the <a href="/#disqus_thread" class="text-blue-600 hover:underline">Bad Candidate</a> platform for transparent candidate evaluation.</p>
             <p class="mt-2">For questions or support, visit our <a href="https://github.com/orgs/BadCandidate/discussions" class="text-blue-600 hover:underline" target="_blank" rel="noopener">GitHub Discussions</a>.</p>
         </footer>
     </div>

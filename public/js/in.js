@@ -6,7 +6,6 @@ const pdfParam = urlParams.get('pdf');
 
 // Convert parameter format (e.g., "vn-250725DinhHuuLuan" to "vn/250725DinhHuuLuan.pdf")
 let pdfUrl = '';
-let fbCommentsUrl = '';
 
 if (pdfParam) {
     // Split by dash to separate language code and filename
@@ -15,9 +14,11 @@ if (pdfParam) {
         const langCode = parts[0]; // e.g., "vn"
         const filename = parts.slice(1).join('-'); // e.g., "250725DinhHuuLuan"
         pdfUrl = `https://badcandidate.github.io/${langCode}/${filename}.pdf`;
-        fbCommentsUrl = pdfUrl;
     }
 }
+
+// Make pdfUrl available globally for Disqus configuration
+window.pdfUrl = pdfUrl;
 
 // Fallback URL if no parameter or invalid format
 if (!pdfUrl) {
@@ -117,140 +118,7 @@ function updateNavButtons() {
     document.getElementById('prev-page').disabled = (pageNum <= 1);
 }
 
-/**
- * Safely update Facebook comments with error handling
- */
-function updateFacebookComments() {
-    try {
-        const fbComments = document.querySelector('.fb-comments');
-        const fallbackElement = document.getElementById('comments-fallback');
-        const loadingElement = document.getElementById('comments-loading');
-        
-        if (fbComments) {
-            fbComments.setAttribute('data-href', fbCommentsUrl);
-            
-            // Hide loading state
-            if (loadingElement) {
-                loadingElement.style.display = 'none';
-            }
-            
-            // Ensure comments are visible by default
-            fbComments.style.display = 'block';
-            if (fallbackElement) {
-                fallbackElement.classList.add('hidden');
-            }
-            
-            // Safely reload Facebook comments with new URL
-            if (window.FB && typeof window.FB.XFBML === 'function') {
-                try {
-                    window.FB.XFBML.parse();
-                    console.log('Facebook comments initialized successfully');
-                } catch (fbError) {
-                    console.warn('Facebook XFBML parse error:', fbError);
-                    // Don't show fallback immediately, try again
-                    setTimeout(() => {
-                        try {
-                            if (window.FB && typeof window.FB.XFBML === 'function') {
-                                window.FB.XFBML.parse();
-                                console.log('Facebook comments retry successful');
-                            } else {
-                                console.warn('Facebook SDK not available on retry');
-                                showCommentsFallback();
-                            }
-                        } catch (retryError) {
-                            console.warn('Facebook SDK retry failed:', retryError);
-                            showCommentsFallback();
-                        }
-                    }, 2000);
-                }
-            } else {
-                console.log('Facebook SDK not available, waiting for initialization...');
-                // Don't show fallback immediately, wait for SDK to load
-            }
-        }
-    } catch (error) {
-        console.warn('Error updating Facebook comments:', error);
-        // Only show fallback for critical errors
-        if (error.message && error.message.includes('critical')) {
-            showCommentsFallback();
-        }
-    }
-}
 
-/**
- * Show fallback message for comments
- */
-function showCommentsFallback() {
-    const fallbackElement = document.getElementById('comments-fallback');
-    const fbComments = document.querySelector('.fb-comments');
-    const loadingElement = document.getElementById('comments-loading');
-    
-    if (loadingElement) {
-        loadingElement.style.display = 'none';
-    }
-    if (fallbackElement) {
-        fallbackElement.classList.remove('hidden');
-    }
-    if (fbComments) {
-        fbComments.style.display = 'none';
-    }
-}
-
-/**
- * Hide fallback message for comments
- */
-function hideCommentsFallback() {
-    const fallbackElement = document.getElementById('comments-fallback');
-    const fbComments = document.querySelector('.fb-comments');
-    const loadingElement = document.getElementById('comments-loading');
-    
-    if (loadingElement) {
-        loadingElement.style.display = 'none';
-    }
-    if (fallbackElement) {
-        fallbackElement.classList.add('hidden');
-    }
-    if (fbComments) {
-        fbComments.style.display = 'block';
-    }
-}
-
-/**
- * Initialize Facebook SDK with error handling
- */
-function initFacebookSDK() {
-    try {
-        console.log('Initializing Facebook SDK...');
-        
-        // Check if Facebook SDK is already loaded
-        if (window.FB) {
-            console.log('Facebook SDK already loaded');
-            updateFacebookComments();
-            return;
-        }
-
-        // Wait for Facebook SDK to load
-        let attempts = 0;
-        const maxAttempts = 50; // 5 seconds total (50 * 100ms)
-        
-        const checkFB = setInterval(() => {
-            attempts++;
-            if (window.FB) {
-                clearInterval(checkFB);
-                console.log('Facebook SDK loaded after', attempts, 'attempts');
-                updateFacebookComments();
-            } else if (attempts >= maxAttempts) {
-                clearInterval(checkFB);
-                console.warn('Facebook SDK failed to load after', maxAttempts, 'attempts');
-                showCommentsFallback();
-            }
-        }, 100);
-
-    } catch (error) {
-        console.warn('Error initializing Facebook SDK:', error);
-        // Don't show fallback immediately for initialization errors
-    }
-}
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
@@ -272,9 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
             redirectBtn.href = pdfUrl;
         }
         
-        // Initialize Facebook SDK with error handling
-        initFacebookSDK();
-        
         // Load PDF document with error handling
         pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc_) {
             pdfDoc = pdfDoc_;
@@ -295,7 +160,26 @@ document.addEventListener('DOMContentLoaded', function() {
             // ensure your PDF is served from the same origin or with proper CORS headers.
         });
         
-    } catch (error) {
-        console.error('Error in DOMContentLoaded:', error);
-    }
-}); 
+            } catch (error) {
+            console.error('Error in DOMContentLoaded:', error);
+        }
+    });
+    
+    // Initialize Disqus Comments
+    var disqus_config = function () {
+        this.page.url = window.location.href;  // Current page URL
+        this.page.identifier = window.pdfUrl || window.location.href; // Use pdfUrl as identifier, fallback to current URL
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://bad-candidate.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    
+    // Load Disqus Count Script
+    var countScript = document.createElement('script');
+    countScript.id = 'dsq-count-scr';
+    countScript.src = '//bad-candidate.disqus.com/count.js';
+    countScript.async = true;
+    document.head.appendChild(countScript); 
