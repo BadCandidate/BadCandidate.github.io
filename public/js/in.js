@@ -251,8 +251,9 @@ document.addEventListener('DOMContentLoaded', function() {
             highlightBox.style.display = 'none';
             guideIconBtn.style.display = 'flex';
             
-            // Save state to localStorage
+            // Save state and timestamp to localStorage
             localStorage.setItem('highlightCollapsed', 'true');
+            localStorage.setItem('highlightLastHideTime', Date.now().toString());
         }, 300);
     }
     
@@ -264,21 +265,65 @@ document.addEventListener('DOMContentLoaded', function() {
         highlightBox.style.display = 'block';
         highlightBox.classList.remove('collapsing');
         
-        // Save state to localStorage
+        // Save state to localStorage and reset counters
         localStorage.setItem('highlightCollapsed', 'false');
+        localStorage.setItem('highlightPageLoadCount', '0');
+        localStorage.removeItem('highlightLastHideTime');
     }
     
-    // Always show highlight box on page load
+    // Smart highlight box state management
     function checkHighlightState() {
         const highlightBox = document.getElementById('highlight-box');
         const guideIconBtn = document.getElementById('guide-icon-btn');
         
-        // Always show the highlight box and hide the guide icon
-        highlightBox.style.display = 'block';
-        guideIconBtn.style.display = 'none';
+        const now = Date.now();
+        const lastHideTime = localStorage.getItem('highlightLastHideTime');
+        const pageLoadCount = parseInt(localStorage.getItem('highlightPageLoadCount') || '0');
+        const wasCollapsed = localStorage.getItem('highlightCollapsed');
         
-        // Reset localStorage to show state
-        localStorage.setItem('highlightCollapsed', 'false');
+        // Increment page load count
+        const newPageLoadCount = pageLoadCount + 1;
+        localStorage.setItem('highlightPageLoadCount', newPageLoadCount.toString());
+        
+        // Check if we should force show the highlight box
+        const shouldForceShow = shouldShowHighlightBox(now, lastHideTime, newPageLoadCount);
+        
+        if (shouldForceShow) {
+            // Force show the highlight box
+            highlightBox.style.display = 'block';
+            guideIconBtn.style.display = 'none';
+            localStorage.setItem('highlightCollapsed', 'false');
+            
+            // Reset counters
+            localStorage.setItem('highlightPageLoadCount', '0');
+            localStorage.removeItem('highlightLastHideTime');
+        } else if (wasCollapsed === 'true') {
+            // Show collapsed state (icon only)
+            highlightBox.style.display = 'none';
+            guideIconBtn.style.display = 'flex';
+        } else {
+            // Show full highlight box
+            highlightBox.style.display = 'block';
+            guideIconBtn.style.display = 'none';
+        }
+    }
+    
+    function shouldShowHighlightBox(currentTime, lastHideTime, pageLoadCount) {
+        // Show if page has been loaded 10+ times
+        if (pageLoadCount >= 10) {
+            return true;
+        }
+        
+        // Show if 8 hours have passed since last hide
+        if (lastHideTime) {
+            const eightHoursInMs = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
+            const timeSinceHide = currentTime - parseInt(lastHideTime);
+            if (timeSinceHide >= eightHoursInMs) {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     // Make functions available globally
