@@ -239,6 +239,55 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize Disqus with current theme
     updateDisqusTheme(currentTheme);
     
+    // Highlight box collapse/expand functionality
+    function hideHighlight() {
+        const highlightBox = document.getElementById('highlight-box');
+        const guideIconBtn = document.getElementById('guide-icon-btn');
+        
+        // Add collapsing animation
+        highlightBox.classList.add('collapsing');
+        
+        setTimeout(() => {
+            highlightBox.style.display = 'none';
+            guideIconBtn.style.display = 'flex';
+            
+            // Save state to localStorage
+            localStorage.setItem('highlightCollapsed', 'true');
+        }, 300);
+    }
+    
+    function showHighlight() {
+        const highlightBox = document.getElementById('highlight-box');
+        const guideIconBtn = document.getElementById('guide-icon-btn');
+        
+        guideIconBtn.style.display = 'none';
+        highlightBox.style.display = 'block';
+        highlightBox.classList.remove('collapsing');
+        
+        // Save state to localStorage
+        localStorage.setItem('highlightCollapsed', 'false');
+    }
+    
+    // Always show highlight box on page load
+    function checkHighlightState() {
+        const highlightBox = document.getElementById('highlight-box');
+        const guideIconBtn = document.getElementById('guide-icon-btn');
+        
+        // Always show the highlight box and hide the guide icon
+        highlightBox.style.display = 'block';
+        guideIconBtn.style.display = 'none';
+        
+        // Reset localStorage to show state
+        localStorage.setItem('highlightCollapsed', 'false');
+    }
+    
+    // Make functions available globally
+    window.hideHighlight = hideHighlight;
+    window.showHighlight = showHighlight;
+    
+    // Initialize highlight state on page load
+    setTimeout(checkHighlightState, 100);
+    
     // Initialize Disqus Comments
     var disqus_config = function () {
         this.page.url = window.location.href;  // Current page URL
