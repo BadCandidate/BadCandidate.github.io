@@ -182,4 +182,54 @@ document.addEventListener('DOMContentLoaded', function() {
     countScript.id = 'dsq-count-scr';
     countScript.src = '//bad-candidate.disqus.com/count.js';
     countScript.async = true;
-    document.head.appendChild(countScript); 
+    document.head.appendChild(countScript);
+    
+    // Theme toggle functionality
+    let currentTheme = 'light';
+    
+    // Load saved theme preference
+    function loadThemePreference() {
+        const savedTheme = localStorage.getItem('badCandidateTheme');
+        if (savedTheme) {
+            currentTheme = savedTheme;
+        }
+    }
+    
+    // Save theme preference
+    function saveThemePreference() {
+        localStorage.setItem('badCandidateTheme', currentTheme);
+    }
+    
+    // Toggle theme function
+    function toggleTheme() {
+        const body = document.body;
+        const themeToggle = document.querySelector('.theme-toggle');
+        
+        if (currentTheme === 'dark') {
+            body.setAttribute('data-theme', 'light');
+            currentTheme = 'light';
+            themeToggle.innerHTML = '<span>☀️</span>';
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            currentTheme = 'dark';
+            themeToggle.innerHTML = '<span>🌙</span>';
+        }
+        
+        // Save theme preference
+        saveThemePreference();
+    }
+    
+    // Make toggleTheme available globally
+    window.toggleTheme = toggleTheme;
+    
+    // Initialize theme on page load
+    loadThemePreference();
+    document.body.setAttribute('data-theme', currentTheme);
+    
+    // Set correct theme toggle icon
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (currentTheme === 'dark') {
+        themeToggle.innerHTML = '<span>🌙</span>';
+    } else {
+        themeToggle.innerHTML = '<span>☀️</span>';
+    } 

@@ -87,83 +87,121 @@
 
     <link rel="stylesheet" href="public/style/in.css">
 </head>
-<body class="bg-gray-100 text-gray-800" data-theme="light">
+<body data-theme="light">
+    <header class="header" role="banner">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" role="heading" aria-level="1">🚫 Bad Candidate</div>
+                <nav class="controls" role="navigation" aria-label="Site controls">
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                        <span>☀️</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
 
-
-    <div class="container mx-auto p-4">
-        <header class="text-center mb-8" role="banner">
-            <!-- <nav class="mb-4" role="navigation" aria-label="Breadcrumb">
-                <ol class="flex justify-center items-center space-x-2 text-sm text-gray-600">
-                    <li><a href="/#disqus_thread" class="hover:text-blue-600 transition-colors">Home</a></li>
-                    <li><span aria-hidden="true">/</span></li>
-                    <li aria-current="page">Document Review</li>
-                </ol>
-            </nav> -->
-            
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Candidate Review</h1>
-            <p class="text-gray-600 mt-2">Read the document and leave your comments below.</p>
-        </header>
-
-        <!-- Main content grid: 1 column on mobile, 2/3 and 1/3 on desktop -->
-        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8" role="main">
-
-            <!-- Left Side: PDF Viewer (2/3 width on desktop) -->
-            <section class="bg-white p-6 rounded-lg shadow-lg flex flex-col lg:col-span-2" aria-labelledby="viewer-heading">
-                <h2 id="viewer-heading" class="text-2xl font-semibold mb-4 border-b pb-2">Document Viewer</h2>
-                
-                <!-- PDF.js will render the PDF page on this canvas -->
-                <div id="pdf-viewer-container" class="flex-grow flex justify-center items-start bg-gray-50 p-4 rounded-md" role="region" aria-label="PDF Document">
-                     <canvas id="pdf-canvas" aria-label="PDF Document Content"></canvas>
-                </div>
-                
-                <!-- Bottom controls outside the PDF viewer -->
-                <div class="flex justify-between items-center mt-4 gap-4 border-t pt-4 bg-white/90 backdrop-blur-sm shadow-lg pdf-bottom-controls" role="toolbar" aria-label="Document controls">
-                    <!-- Redirect to PDF button (bottom left) -->
-                    <a id="redirect-pdf-btn" href="#" target="_blank" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md transition-colors duration-300 flex items-center gap-2" aria-label="Open PDF in new tab">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        Open PDF
-                    </a>
-                    
-                    <!-- PDF Navigation Controls (bottom right) -->
-                    <div class="flex items-center gap-2" role="group" aria-label="Page navigation">
-                        <button id="prev-page" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition-colors duration-300 disabled:bg-gray-300" aria-label="Go to previous page">
-                            Previous
-                        </button>
-                        <div class="bg-white text-gray-800 font-semibold py-2 px-4 border rounded-md" role="status" aria-live="polite">
-                            <span>Page </span>
-                            <span id="page-num"></span>
-                            <span> of </span>
-                            <span id="page-count"></span>
-                        </div>
-                        <button id="next-page" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition-colors duration-300 disabled:bg-gray-300" aria-label="Go to next page">
-                            Next
-                        </button>
-                    </div>
-                </div>
-                
-                <div id="loader" class="text-center p-4" role="status" aria-live="polite">Loading Document...</div>
+    <main class="main-content" role="main">
+        <div class="container">
+            <section class="hero" aria-labelledby="main-heading">
+                <h1 id="main-heading">📄 Xem Tài Liệu Ứng Viên</h1>
+                <p>Đọc tài liệu và để lại nhận xét bên dưới. Bạn cần đăng ký tài khoản (có thể đổi tên sau). Mọi thông tin đều dạng ẩn danh.</p>
             </section>
 
-            <!-- Right Side: Disqus Comments -->
-            <aside class="bg-white p-6 rounded-lg shadow-lg" aria-labelledby="comments-heading">
-                <h2 id="comments-heading" class="text-2xl font-semibold mb-4 border-b pb-2">Comments</h2>
-                
-                <!-- Disqus Comments Plugin -->
-                <div id="comments-container">
-                    <div id="disqus_thread" aria-label="Community comments section"></div>
-                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            <!-- Main content grid: 1 column on mobile, 2/3 and 1/3 on desktop -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                <!-- Left Side: PDF Viewer (2/3 width on desktop) -->
+                <section class="section lg:col-span-2" aria-labelledby="viewer-heading">
+                    <h2 id="viewer-heading">📋 Xem Tài Liệu</h2>
+                    
+                    <!-- PDF.js will render the PDF page on this canvas -->
+                    <div id="pdf-viewer-container" class="flex-grow flex justify-center items-start p-4 rounded-md" role="region" aria-label="PDF Document">
+                         <canvas id="pdf-canvas" aria-label="PDF Document Content"></canvas>
+                    </div>
+                    
+                    <!-- Bottom controls outside the PDF viewer -->
+                    <div class="pdf-bottom-controls" role="toolbar" aria-label="Document controls">
+                        <!-- Redirect to PDF button (bottom left) -->
+                        <a id="redirect-pdf-btn" href="#" target="_blank" class="link" aria-label="Open PDF in new tab">
+                            📄 Mở PDF
+                        </a>
+                        
+                        <!-- PDF Navigation Controls (bottom right) -->
+                        <div class="flex items-center gap-2" role="group" aria-label="Page navigation">
+                            <button id="prev-page" class="link" aria-label="Go to previous page">
+                                ⬅️ Trước
+                            </button>
+                            <div class="bg-white text-gray-800 font-semibold py-2 px-4 border rounded-md" role="status" aria-live="polite">
+                                <span>Trang </span>
+                                <span id="page-num"></span>
+                                <span> / </span>
+                                <span id="page-count"></span>
+                            </div>
+                            <button id="next-page" class="link" aria-label="Go to next page">
+                                Tiếp ➡️
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="loader" class="text-center p-4" role="status" aria-live="polite">Đang tải tài liệu...</div>
+                </section>
+
+                <!-- Right Side: Disqus Comments -->
+                <aside class="section" aria-labelledby="comments-heading">
+                    <h2 id="comments-heading">💬 Nhận Xét</h2>
+                    
+                    <!-- Disqus Comments Plugin -->
+                    <div id="comments-container">
+                        <div id="disqus_thread" aria-label="Community comments section"></div>
+                        <noscript>Vui lòng bật JavaScript để xem <a href="https://disqus.com/?ref_noscript">nhận xét được hỗ trợ bởi Disqus.</a></noscript>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🚫 Bad Candidate</h3>
+                    <p>Trang web chính thức tổng hợp và chia sẻ những phản hồi trung thực, chuyên nghiệp về các ứng viên từng thể hiện hiệu suất kém, hành vi thiếu chuyên nghiệp hoặc thái độ tiêu cực.</p>
                 </div>
-            </aside>
-        </main>
-        
-        <!-- Footer with additional information -->
-        <footer class="mt-8 text-center text-gray-600 text-sm" role="contentinfo">
-            <p>This tool is part of the <a href="/#disqus_thread" class="text-blue-600 hover:underline">Bad Candidate</a> platform for transparent candidate evaluation.</p>
-            <p class="mt-2">For questions or support, visit our <a href="https://github.com/orgs/BadCandidate/discussions" class="text-blue-600 hover:underline" target="_blank" rel="noopener">GitHub Discussions</a>.</p>
-        </footer>
-    </div>
+                
+                <div class="footer-section">
+                    <h4>🔗 Liên Kết</h4>
+                    <ul>
+                        <li><a href="https://github.com/BadCandidate" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+                        <li><a href="https://github.com/orgs/BadCandidate/discussions" target="_blank" rel="noopener noreferrer">Discussions</a></li>
+                        <li><a href="https://github.com/orgs/BadCandidate/discussions/categories/q-a" target="_blank" rel="noopener noreferrer">Q&A</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>📧 Liên Hệ</h4>
+                    <ul>
+                        <li><a href="mailto:badcandidate@googlegroups.com">Email: Contact Email</a></li>
+                        <li>Dự án mã nguồn mở</li>
+                        <li>Đóng góp cộng đồng</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>📊 Thống Kê</h4>
+                    <div class="flag-counter">
+                        <a href="https://info.flagcounter.com/hkEe" target="_blank" rel="noopener noreferrer" aria-label="Visit flag counter">
+                            <img src="https://s01.flagcounter.com/count/hkEe/bg_FFFFFF/txt_000000/border_CCCCCC/columns_1/maxflags_1/viewers_3/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Bad Candidate. Tất cả quyền được bảo lưu. Dự án được phát triển vì lợi ích cộng đồng.</p>
+            </div>
+        </div>
+    </footer>
 
     <script src="public/js/in.js"></script>
 </body>
