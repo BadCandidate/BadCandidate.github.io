@@ -118,10 +118,219 @@ function updateNavButtons() {
     document.getElementById('prev-page').disabled = (pageNum <= 1);
 }
 
+// Theme management
+let currentTheme = 'light';
 
+// Load saved theme preference
+function loadThemePreference() {
+    const savedTheme = localStorage.getItem('badCandidateTheme');
+    if (savedTheme) {
+        currentTheme = savedTheme;
+    }
+}
 
-// Event listeners
-document.addEventListener('DOMContentLoaded', function() {
+// Save theme preference
+function saveThemePreference() {
+    localStorage.setItem('badCandidateTheme', currentTheme);
+}
+
+// Toggle theme function
+function toggleTheme() {
+    const body = document.body;
+    const themeToggle = document.querySelector('.theme-toggle');
+    
+    if (currentTheme === 'dark') {
+        body.setAttribute('data-theme', 'light');
+        currentTheme = 'light';
+        themeToggle.innerHTML = '<span>☀️</span>';
+    } else {
+        body.setAttribute('data-theme', 'dark');
+        currentTheme = 'dark';
+        themeToggle.innerHTML = '<span>🌙</span>';
+    }
+    
+    // Update Waline theme
+    updateWalineTheme(currentTheme);
+    
+    // Save theme preference
+    saveThemePreference();
+}
+
+// Make toggleTheme available globally
+window.toggleTheme = toggleTheme;
+
+// Highlight box management
+function hideHighlight() {
+    const highlightBox = document.getElementById('highlight-box');
+    const guideIconBtn = document.getElementById('guide-icon-btn');
+    
+    // Add collapsing animation
+    highlightBox.classList.add('collapsing');
+    
+    setTimeout(() => {
+        highlightBox.style.display = 'none';
+        guideIconBtn.style.display = 'flex';
+        
+        // Save state and timestamp to localStorage
+        localStorage.setItem('highlightCollapsed', 'true');
+        localStorage.setItem('highlightLastHideTime', Date.now().toString());
+    }, 300);
+}
+
+function showHighlight() {
+    const highlightBox = document.getElementById('highlight-box');
+    const guideIconBtn = document.getElementById('guide-icon-btn');
+    
+    guideIconBtn.style.display = 'none';
+    highlightBox.style.display = 'block';
+    highlightBox.classList.remove('collapsing');
+    
+    // Save state to localStorage and reset counters
+    localStorage.setItem('highlightCollapsed', 'false');
+    localStorage.setItem('highlightPageLoadCount', '0');
+    localStorage.removeItem('highlightLastHideTime');
+}
+
+// Smart highlight box state management
+function checkHighlightState() {
+    const highlightBox = document.getElementById('highlight-box');
+    const guideIconBtn = document.getElementById('guide-icon-btn');
+    
+    const now = Date.now();
+    const lastHideTime = localStorage.getItem('highlightLastHideTime');
+    const pageLoadCount = parseInt(localStorage.getItem('highlightPageLoadCount') || '0');
+    const wasCollapsed = localStorage.getItem('highlightCollapsed');
+    
+    // Increment page load count
+    const newPageLoadCount = pageLoadCount + 1;
+    localStorage.setItem('highlightPageLoadCount', newPageLoadCount.toString());
+    
+    // Check if we should force show the highlight box
+    const shouldForceShow = shouldShowHighlightBox(now, lastHideTime, newPageLoadCount);
+    
+    if (shouldForceShow) {
+        // Force show the highlight box
+        highlightBox.style.display = 'block';
+        guideIconBtn.style.display = 'none';
+        localStorage.setItem('highlightCollapsed', 'false');
+        
+        // Reset counters
+        localStorage.setItem('highlightPageLoadCount', '0');
+        localStorage.removeItem('highlightLastHideTime');
+    } else if (wasCollapsed === 'true') {
+        // Show collapsed state (icon only)
+        highlightBox.style.display = 'none';
+        guideIconBtn.style.display = 'flex';
+    } else {
+        // Show full highlight box
+        highlightBox.style.display = 'block';
+        guideIconBtn.style.display = 'none';
+    }
+}
+
+function shouldShowHighlightBox(currentTime, lastHideTime, pageLoadCount) {
+    // Show if page has been loaded 10+ times
+    if (pageLoadCount >= 10) {
+        return true;
+    }
+    
+    // Show if 8 hours have passed since last hide
+    if (lastHideTime) {
+        const eightHoursInMs = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
+        const timeSinceHide = currentTime - parseInt(lastHideTime);
+        if (timeSinceHide >= eightHoursInMs) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+// Make functions available globally
+window.hideHighlight = hideHighlight;
+window.showHighlight = showHighlight;
+
+// Waline integration
+async function initWaline(theme = 'light') {
+    const walineContainer = document.getElementById('waline');
+    if (!walineContainer) return;
+    
+    // Clear existing content
+    walineContainer.innerHTML = '';
+    
+    try {
+        // Import Waline dynamically
+        const { init } = await import('https://unpkg.com/@waline/client@v3/dist/waline.js');
+        
+        // Initialize Waline
+        await init({
+            el: '#waline',
+            serverURL: 'https://waline-bad-candidate.vercel.app',
+            path: window.pdfUrl || window.location.href,
+            dark: theme === 'dark',
+            // Optional: customize appearance
+            // avatar: 'monsterid',
+            avatarForce: false,
+            meta: ['nick'],
+            // meta: ['nick', 'mail', 'link'],
+            requiredMeta: ['nick'],
+            login: 'disable',
+            wordLimit: 0,
+            pageSize: 10,
+            // Vietnamese language
+            locale: {
+                placeholder: 'Nhập bình luận của bạn...',
+                submit: 'Gửi',
+                reply: 'Trả lời',
+                cancel: 'Hủy',
+                like: 'Thích',
+                unlike: 'Bỏ thích',
+                comment: 'Bình luận',
+                reply: 'Trả lời',
+                more: 'Xem thêm',
+                loading: 'Đang tải...',
+                error: 'Có lỗi xảy ra',
+                retry: 'Thử lại',
+                login: 'Đăng nhập',
+                logout: 'Đăng xuất',
+                admin: 'Quản trị',
+                sticky: 'Ghim',
+                level: {
+                    '0': 'Khách',
+                    '1': 'Thành viên',
+                    '2': 'Moderator',
+                    '3': 'Admin'
+                }
+            }
+        });
+        
+        console.log('Waline initialized successfully');
+    } catch (error) {
+        console.error('Failed to initialize Waline:', error);
+        const walineContainer = document.getElementById('waline');
+        if (walineContainer) {
+            walineContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">💬 Không thể kết nối hệ thống bình luận. Vui lòng thử lại sau.</p>';
+        }
+    }
+}
+
+// Update Waline theme
+async function updateWalineTheme(theme) {
+    try {
+        const walineContainer = document.getElementById('waline');
+        if (walineContainer) {
+            // Remove existing Waline instance
+            walineContainer.innerHTML = '';
+            // Reinitialize Waline with new theme
+            await initWaline(theme);
+        }
+    } catch (error) {
+        console.error('Failed to update Waline theme:', error);
+    }
+}
+
+// Initialize everything when DOM is ready
+async function initializeApp() {
     try {
         // Add event listeners for navigation buttons
         const prevButton = document.getElementById('prev-page');
@@ -156,238 +365,34 @@ document.addEventListener('DOMContentLoaded', function() {
             if (loader) {
                 loader.textContent = 'Failed to load PDF. Please try again or check the console for details.';
             }
-            // This can happen due to CORS policy. For a real project, 
-            // ensure your PDF is served from the same origin or with proper CORS headers.
         });
         
-            } catch (error) {
-            console.error('Error in DOMContentLoaded:', error);
-        }
-    });
-    
-    // Theme toggle functionality
-    let currentTheme = 'light';
-    
-    // Load saved theme preference
-    function loadThemePreference() {
-        const savedTheme = localStorage.getItem('badCandidateTheme');
-        if (savedTheme) {
-            currentTheme = savedTheme;
-        }
-    }
-    
-    // Save theme preference
-    function saveThemePreference() {
-        localStorage.setItem('badCandidateTheme', currentTheme);
-    }
-    
-    // Update Waline theme
-    function updateWalineTheme(theme) {
-        if (window.Waline) {
-            // If Waline is already loaded, update its theme
-            // Waline automatically adapts to system theme, but we can force it
-            const walineContainer = document.getElementById('waline');
-            if (walineContainer) {
-                // Remove existing Waline instance
-                walineContainer.innerHTML = '';
-                // Reinitialize Waline with new theme
-                initWaline(theme);
-            }
-        } else {
-            // If Waline hasn't loaded yet, set the theme for when it does load
-            window.walineTheme = theme;
-        }
-    }
-    
-    // Toggle theme function
-    function toggleTheme() {
-        const body = document.body;
+        // Initialize theme
+        loadThemePreference();
+        document.body.setAttribute('data-theme', currentTheme);
+        
+        // Set correct theme toggle icon
         const themeToggle = document.querySelector('.theme-toggle');
-        
         if (currentTheme === 'dark') {
-            body.setAttribute('data-theme', 'light');
-            currentTheme = 'light';
-            themeToggle.innerHTML = '<span>☀️</span>';
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            currentTheme = 'dark';
             themeToggle.innerHTML = '<span>🌙</span>';
-        }
-        
-        // Update Waline theme
-        updateWalineTheme(currentTheme);
-        
-        // Save theme preference
-        saveThemePreference();
-    }
-    
-    // Make toggleTheme available globally
-    window.toggleTheme = toggleTheme;
-    
-    // Initialize theme on page load
-    loadThemePreference();
-    document.body.setAttribute('data-theme', currentTheme);
-    
-    // Set correct theme toggle icon
-    const themeToggle = document.querySelector('.theme-toggle');
-    if (currentTheme === 'dark') {
-        themeToggle.innerHTML = '<span>🌙</span>';
-    } else {
-        themeToggle.innerHTML = '<span>☀️</span>';
-    }
-    
-    // Initialize Waline with current theme
-    updateWalineTheme(currentTheme);
-    
-    // Highlight box collapse/expand functionality
-    function hideHighlight() {
-        const highlightBox = document.getElementById('highlight-box');
-        const guideIconBtn = document.getElementById('guide-icon-btn');
-        
-        // Add collapsing animation
-        highlightBox.classList.add('collapsing');
-        
-        setTimeout(() => {
-            highlightBox.style.display = 'none';
-            guideIconBtn.style.display = 'flex';
-            
-            // Save state and timestamp to localStorage
-            localStorage.setItem('highlightCollapsed', 'true');
-            localStorage.setItem('highlightLastHideTime', Date.now().toString());
-        }, 300);
-    }
-    
-    function showHighlight() {
-        const highlightBox = document.getElementById('highlight-box');
-        const guideIconBtn = document.getElementById('guide-icon-btn');
-        
-        guideIconBtn.style.display = 'none';
-        highlightBox.style.display = 'block';
-        highlightBox.classList.remove('collapsing');
-        
-        // Save state to localStorage and reset counters
-        localStorage.setItem('highlightCollapsed', 'false');
-        localStorage.setItem('highlightPageLoadCount', '0');
-        localStorage.removeItem('highlightLastHideTime');
-    }
-    
-    // Smart highlight box state management
-    function checkHighlightState() {
-        const highlightBox = document.getElementById('highlight-box');
-        const guideIconBtn = document.getElementById('guide-icon-btn');
-        
-        const now = Date.now();
-        const lastHideTime = localStorage.getItem('highlightLastHideTime');
-        const pageLoadCount = parseInt(localStorage.getItem('highlightPageLoadCount') || '0');
-        const wasCollapsed = localStorage.getItem('highlightCollapsed');
-        
-        // Increment page load count
-        const newPageLoadCount = pageLoadCount + 1;
-        localStorage.setItem('highlightPageLoadCount', newPageLoadCount.toString());
-        
-        // Check if we should force show the highlight box
-        const shouldForceShow = shouldShowHighlightBox(now, lastHideTime, newPageLoadCount);
-        
-        if (shouldForceShow) {
-            // Force show the highlight box
-            highlightBox.style.display = 'block';
-            guideIconBtn.style.display = 'none';
-            localStorage.setItem('highlightCollapsed', 'false');
-            
-            // Reset counters
-            localStorage.setItem('highlightPageLoadCount', '0');
-            localStorage.removeItem('highlightLastHideTime');
-        } else if (wasCollapsed === 'true') {
-            // Show collapsed state (icon only)
-            highlightBox.style.display = 'none';
-            guideIconBtn.style.display = 'flex';
         } else {
-            // Show full highlight box
-            highlightBox.style.display = 'block';
-            guideIconBtn.style.display = 'none';
-        }
-    }
-    
-    function shouldShowHighlightBox(currentTime, lastHideTime, pageLoadCount) {
-        // Show if page has been loaded 10+ times
-        if (pageLoadCount >= 10) {
-            return true;
+            themeToggle.innerHTML = '<span>☀️</span>';
         }
         
-        // Show if 8 hours have passed since last hide
-        if (lastHideTime) {
-            const eightHoursInMs = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
-            const timeSinceHide = currentTime - parseInt(lastHideTime);
-            if (timeSinceHide >= eightHoursInMs) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    // Make functions available globally
-    window.hideHighlight = hideHighlight;
-    window.showHighlight = showHighlight;
-    
-    // Initialize highlight state on page load
-    setTimeout(checkHighlightState, 100);
-    
-    // Initialize Waline Comments
-    function initWaline(theme = 'light') {
-        const walineContainer = document.getElementById('waline');
-        if (!walineContainer) return;
-        
-        // Clear existing content
-        walineContainer.innerHTML = '';
+        // Initialize highlight state
+        setTimeout(checkHighlightState, 100);
         
         // Initialize Waline
-        window.Waline.init({
-            el: '#waline',
-            serverURL: 'https://waline-bad-candidate.vercel.app', // You'll need to set up your own Waline server
-            path: window.pdfUrl || window.location.href,
-            dark: theme === 'dark',
-            // Optional: customize appearance
-            avatar: 'monsterid',
-            avatarForce: false,
-            meta: ['nick', 'mail', 'link'],
-            requiredMeta: ['nick'],
-            login: 'enable',
-            wordLimit: 0,
-            pageSize: 10,
-            // Vietnamese language
-            locale: {
-                placeholder: 'Nhập bình luận của bạn...',
-                submit: 'Gửi',
-                reply: 'Trả lời',
-                cancel: 'Hủy',
-                like: 'Thích',
-                unlike: 'Bỏ thích',
-                comment: 'Bình luận',
-                reply: 'Trả lời',
-                more: 'Xem thêm',
-                loading: 'Đang tải...',
-                error: 'Có lỗi xảy ra',
-                retry: 'Thử lại',
-                login: 'Đăng nhập',
-                logout: 'Đăng xuất',
-                admin: 'Quản trị',
-                sticky: 'Ghim',
-                level: {
-                    '0': 'Khách',
-                    '1': 'Thành viên',
-                    '2': 'Moderator',
-                    '3': 'Admin'
-                }
-            }
-        });
+        await initWaline(currentTheme);
+        
+    } catch (error) {
+        console.error('Error in app initialization:', error);
     }
-    
-    // Initialize Waline when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            initWaline(currentTheme);
-        });
-    } else {
-        initWaline(currentTheme);
-    } 
+}
+
+// Start the application
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    initializeApp();
+} 
