@@ -269,14 +269,16 @@ async function initWaline(theme = 'light') {
             path: window.pdfUrl || window.location.href,
             dark: theme === 'dark',
             // Optional: customize appearance
-            // avatar: 'monsterid',
-            avatarForce: false,
+            avatar: 'retro',
+            avatarForce: true,
             meta: ['nick'],
             // meta: ['nick', 'mail', 'link'],
             requiredMeta: ['nick'],
             login: 'disable',
             wordLimit: 0,
             pageSize: 10,
+            // Disable image and gif uploads
+            imageUploader: false,
             // Vietnamese language
             locale: {
                 placeholder: 'Nhập bình luận của bạn...',
