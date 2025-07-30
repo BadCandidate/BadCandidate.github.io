@@ -377,9 +377,6 @@ body {
     border-top: 1px solid var(--border-color);
     padding-top: 1rem;
     margin-top: 1rem;
-    background: rgba(255,255,255,0.9);
-    backdrop-filter: blur(4px);
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
     display: flex;
     justify-content: space-between;
     align-items: center;
