@@ -875,4 +875,31 @@ body {
 
 .flag-counter {
     margin-top: 2rem;
+}
+
+/* Waline Comments Integration */
+#waline {
+    margin-top: 1rem;
+}
+
+/* Ensure Waline respects theme colors */
+[data-theme="dark"] #waline {
+    --waline-bgcolor: var(--surface-color);
+    --waline-bgcolor-light: var(--background-color);
+    --waline-color: var(--text-color);
+    --waline-border-color: var(--border-color);
+}
+
+[data-theme="light"] #waline {
+    --waline-bgcolor: var(--surface-color);
+    --waline-bgcolor-light: var(--background-color);
+    --waline-color: var(--text-color);
+    --waline-border-color: var(--border-color);
+}
+
+/* Responsive adjustments for Waline */
+@media (max-width: 768px) {
+    #waline {
+        margin-top: 0.5rem;
+    }
 } 

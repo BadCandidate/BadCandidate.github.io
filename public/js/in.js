@@ -17,7 +17,7 @@ if (pdfParam) {
     }
 }
 
-// Make pdfUrl available globally for Disqus configuration
+// Make pdfUrl available globally for Waline configuration
 window.pdfUrl = pdfUrl;
 
 // Fallback URL if no parameter or invalid format
@@ -181,21 +181,21 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('badCandidateTheme', currentTheme);
     }
     
-    // Update Disqus theme
-    function updateDisqusTheme(theme) {
-        if (window.DISQUS) {
-            // If Disqus is already loaded, update its theme
-            window.DISQUS.reset({
-                reload: true,
-                config: function() {
-                    this.page.identifier = window.pdfUrl || window.location.href;
-                    this.page.url = window.location.href;
-                    this.page.theme = theme;
-                }
-            });
+    // Update Waline theme
+    function updateWalineTheme(theme) {
+        if (window.Waline) {
+            // If Waline is already loaded, update its theme
+            // Waline automatically adapts to system theme, but we can force it
+            const walineContainer = document.getElementById('waline');
+            if (walineContainer) {
+                // Remove existing Waline instance
+                walineContainer.innerHTML = '';
+                // Reinitialize Waline with new theme
+                initWaline(theme);
+            }
         } else {
-            // If Disqus hasn't loaded yet, set the theme for when it does load
-            window.disqusTheme = theme;
+            // If Waline hasn't loaded yet, set the theme for when it does load
+            window.walineTheme = theme;
         }
     }
     
@@ -214,8 +214,8 @@ document.addEventListener('DOMContentLoaded', function() {
             themeToggle.innerHTML = '<span>🌙</span>';
         }
         
-        // Update Disqus theme
-        updateDisqusTheme(currentTheme);
+        // Update Waline theme
+        updateWalineTheme(currentTheme);
         
         // Save theme preference
         saveThemePreference();
@@ -236,8 +236,8 @@ document.addEventListener('DOMContentLoaded', function() {
         themeToggle.innerHTML = '<span>☀️</span>';
     }
     
-    // Initialize Disqus with current theme
-    updateDisqusTheme(currentTheme);
+    // Initialize Waline with current theme
+    updateWalineTheme(currentTheme);
     
     // Highlight box collapse/expand functionality
     function hideHighlight() {
@@ -333,22 +333,74 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize highlight state on page load
     setTimeout(checkHighlightState, 100);
     
-    // Initialize Disqus Comments
-    var disqus_config = function () {
-        this.page.url = window.location.href;  // Current page URL
-        this.page.identifier = window.pdfUrl || window.location.href; // Use pdfUrl as identifier, fallback to current URL
-        this.page.theme = window.disqusTheme || currentTheme; // Set theme based on current theme
-    };
-    (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://badcandidate.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();
+    // Initialize Waline Comments
+    function initWaline(theme = 'light') {
+        const walineContainer = document.getElementById('waline');
+        if (!walineContainer) return;
+        
+        // Clear existing content
+        walineContainer.innerHTML = '';
+        
+        // Check if Waline is available
+        if (typeof window.Waline === 'undefined') {
+            console.error('Waline is not loaded');
+            walineContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">💬 Hệ thống bình luận đang được cập nhật...</p>';
+            return;
+        }
+        
+        // Initialize Waline
+        window.Waline.init({
+            el: '#waline',
+            serverURL: 'https://waline-bad-candidate.vercel.app',
+            path: window.pdfUrl || window.location.href,
+            dark: theme === 'dark',
+            // Optional: customize appearance
+            avatar: 'monsterid',
+            avatarForce: false,
+            meta: ['nick', 'mail', 'link'],
+            requiredMeta: ['nick'],
+            login: 'enable',
+            wordLimit: 0,
+            pageSize: 10,
+            // Vietnamese language
+            locale: {
+                placeholder: 'Nhập bình luận của bạn...',
+                submit: 'Gửi',
+                reply: 'Trả lời',
+                cancel: 'Hủy',
+                like: 'Thích',
+                unlike: 'Bỏ thích',
+                comment: 'Bình luận',
+                reply: 'Trả lời',
+                more: 'Xem thêm',
+                loading: 'Đang tải...',
+                error: 'Có lỗi xảy ra',
+                retry: 'Thử lại',
+                login: 'Đăng nhập',
+                logout: 'Đăng xuất',
+                admin: 'Quản trị',
+                sticky: 'Ghim',
+                level: {
+                    '0': 'Khách',
+                    '1': 'Thành viên',
+                    '2': 'Moderator',
+                    '3': 'Admin'
+                }
+            }
+        }).catch(function(error) {
+            console.error('Failed to initialize Waline:', error);
+            const walineContainer = document.getElementById('waline');
+            if (walineContainer) {
+                walineContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">💬 Không thể kết nối hệ thống bình luận. Vui lòng thử lại sau.</p>';
+            }
+        });
+    }
     
-    // Load Disqus Count Script
-    var countScript = document.createElement('script');
-    countScript.id = 'dsq-count-scr';
-    countScript.src = '//badcandidate.disqus.com/count.js';
-    countScript.async = true;
-    document.head.appendChild(countScript); 
+    // Initialize Waline when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            initWaline(currentTheme);
+        });
+    } else {
+        initWaline(currentTheme);
+    } 

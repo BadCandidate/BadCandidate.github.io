@@ -85,6 +85,10 @@
     <!-- PDF.js library from Mozilla -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
 
+    <!-- Waline CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+    <script src="https://unpkg.com/@waline/client@v3/dist/waline.js"></script>
+
     <link rel="stylesheet" href="public/style/in.css">
 </head>
 <body data-theme="light">
@@ -170,14 +174,13 @@
                     <div id="loader" class="text-center p-4" role="status" aria-live="polite">Đang tải tài liệu...</div>
                 </section>
 
-                <!-- Right Side: Disqus Comments -->
+                <!-- Right Side: Waline Comments -->
                 <aside class="section" aria-labelledby="comments-heading">
                     <h2 id="comments-heading">💬 Nhận Xét</h2>
                     
-                    <!-- Disqus Comments Plugin -->
+                    <!-- Waline Comments Plugin -->
                     <div id="comments-container">
-                        <div id="disqus_thread" aria-label="Community comments section"></div>
-                        <noscript>Vui lòng bật JavaScript để xem <a href="https://disqus.com/?ref_noscript">nhận xét được hỗ trợ bởi Disqus.</a></noscript>
+                        <div id="waline" aria-label="Community comments section"></div>
                     </div>
                 </aside>
             </div>
