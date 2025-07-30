@@ -83,6 +83,19 @@ body {
     color: var(--accent-color);
 }
 
+.logo-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.logo-link:hover {
+    color: #f97316;
+    transform: scale(1.05);
+    text-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
 .controls {
     display: flex;
     gap: 1rem;
