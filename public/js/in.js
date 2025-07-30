@@ -341,17 +341,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Clear existing content
         walineContainer.innerHTML = '';
         
-        // Check if Waline is available
-        if (typeof window.Waline === 'undefined') {
-            console.error('Waline is not loaded');
-            walineContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">💬 Hệ thống bình luận đang được cập nhật...</p>';
-            return;
-        }
-        
         // Initialize Waline
         window.Waline.init({
             el: '#waline',
-            serverURL: 'https://waline-bad-candidate.vercel.app',
+            serverURL: 'https://waline-bad-candidate.vercel.app', // You'll need to set up your own Waline server
             path: window.pdfUrl || window.location.href,
             dark: theme === 'dark',
             // Optional: customize appearance
@@ -386,12 +379,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     '2': 'Moderator',
                     '3': 'Admin'
                 }
-            }
-        }).catch(function(error) {
-            console.error('Failed to initialize Waline:', error);
-            const walineContainer = document.getElementById('waline');
-            if (walineContainer) {
-                walineContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">💬 Không thể kết nối hệ thống bình luận. Vui lòng thử lại sau.</p>';
             }
         });
     }
