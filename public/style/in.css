@@ -54,6 +54,9 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     transition: all 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
@@ -126,6 +129,7 @@ body {
 
 .main-content {
     padding: 2rem 0;
+    flex: 1;
 }
 
 .hero {
