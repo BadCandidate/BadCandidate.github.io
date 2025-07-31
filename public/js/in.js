@@ -281,7 +281,7 @@ async function initWaline(theme = 'light') {
             imageUploader: false,
             // Hide user agent info (browser/OS info)
             showUserAgent: false,
-            lang: 'vi-VN',
+            lang: 'vi-vn',
             // Vietnamese language
             locale: {
                 placeholder: 'Nhập bình luận của bạn...',

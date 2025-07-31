@@ -882,6 +882,10 @@ body {
     margin-top: 1rem;
 }
 
+#waline .wl-card .wl-meta {
+    display: none;
+}
+
 /* Ensure Waline respects theme colors */
 [data-theme="dark"] #waline {
     --waline-bgcolor: var(--surface-color);
