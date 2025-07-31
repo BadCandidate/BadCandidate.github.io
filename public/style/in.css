@@ -886,6 +886,10 @@ body {
     display: none;
 }
 
+#waline .wl-user .wl-user-avatar {
+    display: none;
+}
+
 /* Ensure Waline respects theme colors */
 [data-theme="dark"] #waline {
     --waline-bgcolor: var(--surface-color);
