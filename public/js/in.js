@@ -269,7 +269,7 @@ async function initWaline(theme = 'light') {
             path: window.pdfUrl || window.location.href,
             dark: theme === 'dark',
             // Optional: customize appearance
-            avatar: 'mp', 
+            avatar: 'retro', 
             // avatarForce: true,
             meta: ['nick'],
             // meta: ['nick', 'mail', 'link'],
