@@ -882,11 +882,9 @@ body {
     margin-top: 1rem;
 }
 
-#waline .wl-card .wl-meta {
-    display: none;
-}
-
-#waline .wl-user .wl-user-avatar {
+#waline .wl-card .wl-meta,
+#waline .wl-user .wl-user-avatar,
+#waline .wl-power {
     display: none;
 }
 
