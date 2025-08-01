@@ -896,6 +896,7 @@ body {
 
 #waline .wl-reaction .wl-reaction-list {
     margin-top: 1rem;
+    margin-bottom: 0.25rem;
 }
 
 /* Ensure Waline respects theme colors */
