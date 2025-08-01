@@ -1,4 +1,4 @@
-let currentLanguage = 'vi';
+let currentLanguage = 'en';
 let currentTheme = 'light';
 
 // Load saved preferences from localStorage
