@@ -888,6 +888,7 @@ body {
 
 #waline .wl-card .wl-meta,
 #waline .wl-user .wl-user-avatar,
+#waline .wl-user .verified-icon,
 #waline .wl-reaction .wl-reaction-title,
 #waline .wl-reaction .wl-reaction-text,
 #waline .wl-power {
