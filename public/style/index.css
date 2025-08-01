@@ -44,7 +44,7 @@
     box-sizing: border-box;
 }
 
-ul {
+ul, ol {
     margin-left: 1.5rem;
 }
 
