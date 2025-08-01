@@ -281,6 +281,15 @@ async function initWaline(theme = 'light') {
             imageUploader: false,
             // Hide user agent info (browser/OS info)
             showUserAgent: false,
+            // Enable reaction system
+            reaction: [
+                'public/imgs/like.png',
+                'public/imgs/heart.png',
+                'public/imgs/haha.png',
+                'public/imgs/wow.png',
+                'public/imgs/cry.png',
+                'public/imgs/angry.png'
+            ],
             lang: 'vi-vn',
             // Vietnamese language
             locale: {
@@ -300,6 +309,13 @@ async function initWaline(theme = 'light') {
                 logout: 'Đăng xuất',
                 admin: 'Quản trị',
                 sticky: 'Ghim',
+                reactionTitle: 'Xếp hạng ứng viên',
+                reaction0: 'Thích',
+                reaction1: 'Tim',
+                reaction2: 'Haha',
+                reaction3: 'Wow',
+                reaction4: 'Khóc',
+                reaction5: 'Phẫn nộ',
                 level: {
                     '0': 'Khách',
                     '1': 'Thành viên',

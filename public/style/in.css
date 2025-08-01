@@ -888,8 +888,14 @@ body {
 
 #waline .wl-card .wl-meta,
 #waline .wl-user .wl-user-avatar,
+#waline .wl-reaction .wl-reaction-title,
+#waline .wl-reaction .wl-reaction-text,
 #waline .wl-power {
     display: none;
+}
+
+#waline .wl-reaction .wl-reaction-list {
+    margin-top: 1rem;
 }
 
 /* Ensure Waline respects theme colors */
