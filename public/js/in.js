@@ -40,6 +40,72 @@ const canvas = document.getElementById('pdf-canvas');
 const ctx = canvas.getContext('2d');
 const loader = document.getElementById('loader');
 
+const WALINE_LOCALE = {
+    nick: 'Tên hiển thị',
+    nickError: 'Tên hiển thị không được ít hơn 3 ký tự.',
+    mail: 'Email',
+    mailError: 'Vui lòng xác nhận địa chỉ email của bạn.',
+    link: 'Website',
+    optional: 'Tùy chọn',
+    placeholder: 'Nhập bình luận của bạn...',
+    sofa: 'Chưa có bình luận nào.',
+    submit: 'Gửi',
+    like: 'Thích',
+    cancelLike: 'Bỏ thích',
+    reply: 'Trả lời',
+    cancelReply: 'Hủy trả lời',
+    comment: 'Bình luận',
+    refresh: 'Làm mới',
+    more: 'Xem thêm...',
+    preview: 'Xem trước',
+    emoji: 'Biểu tượng cảm xúc',
+    uploadImage: 'Tải ảnh lên',
+    seconds: 'giây trước',
+    minutes: 'phút trước', 
+    hours: 'giờ trước',
+    days: 'ngày trước',
+    now: 'vừa xong',
+    uploading: 'Đang tải lên',
+    login: 'Đăng nhập',
+    logout: 'Đăng xuất',
+    admin: 'Quản trị',
+    sticky: 'Ghim',
+    word: 'Từ',
+    wordHint: 'Vui lòng nhập bình luận từ $0 đến $1 từ!\n Số từ hiện tại: $2',
+    anonymous: 'Khách',
+    level0: 'Khách',
+    level1: 'Thành viên',
+    level2: 'Moderator', 
+    level3: 'Admin',
+    level4: 'VIP',
+    level5: 'Super VIP',
+    gif: 'GIF',
+    gifSearchPlaceholder: 'Tìm kiếm GIF',
+    profile: 'Hồ sơ',
+    approved: 'Đã duyệt',
+    waiting: 'Đang chờ',
+    spam: 'Spam',
+    unsticky: 'Bỏ ghim',
+    oldest: 'Cũ nhất',
+    latest: 'Mới nhất',
+    hottest: 'Nổi bật nhất',
+    reactionTitle: 'Xếp hạng ứng viên',
+    reaction0: 'Thích',
+    reaction1: 'Tim',
+    reaction2: 'Haha',
+    reaction3: 'Wow',
+    reaction4: 'Khóc',
+    reaction5: 'Phẫn nộ',
+    level: {
+        '0': 'Khách',
+        '1': 'Thành viên',
+        '2': 'Moderator',
+        '3': 'Admin'
+    }
+};
+
+
+
 /**
  * Get page info from document, resize canvas accordingly, and render page.
  * @param num Page number.
@@ -292,37 +358,7 @@ async function initWaline(theme = 'light') {
             ],
             lang: 'vi-vn',
             // Vietnamese language
-            locale: {
-                placeholder: 'Nhập bình luận của bạn...',
-                submit: 'Gửi',
-                reply: 'Trả lời',
-                cancel: 'Hủy',
-                like: 'Thích',
-                unlike: 'Bỏ thích',
-                comment: 'Bình luận',
-                reply: 'Trả lời',
-                more: 'Xem thêm',
-                loading: 'Đang tải...',
-                error: 'Có lỗi xảy ra',
-                retry: 'Thử lại',
-                login: 'Đăng nhập',
-                logout: 'Đăng xuất',
-                admin: 'Quản trị',
-                sticky: 'Ghim',
-                reactionTitle: 'Xếp hạng ứng viên',
-                reaction0: 'Thích',
-                reaction1: 'Tim',
-                reaction2: 'Haha',
-                reaction3: 'Wow',
-                reaction4: 'Khóc',
-                reaction5: 'Phẫn nộ',
-                level: {
-                    '0': 'Khách',
-                    '1': 'Thành viên',
-                    '2': 'Moderator',
-                    '3': 'Admin'
-                }
-            }
+            locale: WALINE_LOCALE
         });
         
         console.log('Waline initialized successfully');
