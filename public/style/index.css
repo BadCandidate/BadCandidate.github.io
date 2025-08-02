@@ -242,7 +242,7 @@ body {
 }
 
 .method-card.recommended::before {
-    content: "⭐ Khuyến nghị";
+    content: "⭐ Recommended";
     position: absolute;
     top: -10px;
     left: 20px;
